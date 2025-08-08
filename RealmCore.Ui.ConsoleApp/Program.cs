@@ -4,10 +4,10 @@ using RealmCore.Logic.Spells;
 using RealmCore.Logic.Effects;
 using RealmCore.Logic.Managers;
 using RealmCore.Logic.Interfaces;
-using RealmCore.UI.ConsoleApp.Interfaces;
+using RealmCore.UI.ConsoleApp.Implementations;
 
 
-namespace RealmCore.Ui.ConsoleApp
+namespace RealmCore.UI.ConsoleApp
 {
     public class Program
     {
@@ -15,7 +15,7 @@ namespace RealmCore.Ui.ConsoleApp
         {
             Console.WriteLine("Hello, World!");
 
-            IPlayerCreationUI playerCreationUI = new IPlayerCreationConsole();
+            IPlayerCreationUI playerCreationUI = new PlayerCreationConsoleUI();
 
             PlayerCreationManager playerCreationManager = new PlayerCreationManager(playerCreationUI);
 

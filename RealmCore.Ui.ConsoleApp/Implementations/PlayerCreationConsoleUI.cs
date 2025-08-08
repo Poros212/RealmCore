@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using RealmCore.Logic.Interfaces;
 using RealmCore.Logic.Characters;
 
-namespace RealmCore.UI.ConsoleApp.Interfaces
+namespace RealmCore.UI.ConsoleApp.Implementations
 {
-    public class IPlayerCreationConsole : IPlayerCreationUI
+    public class PlayerCreationConsoleUI : IPlayerCreationUI
     {
         public string EnterName()
         {

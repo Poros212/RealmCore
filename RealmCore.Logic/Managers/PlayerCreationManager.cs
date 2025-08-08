@@ -21,19 +21,16 @@ namespace RealmCore.Logic.Managers
         {
             string name = _playerCreationUI.EnterName();
 
-            while (true)
-            {
-                string characterClass = _playerCreationUI.ChooseCharacter();
+            string characterClass = _playerCreationUI.ChooseCharacter();
 
-                switch (characterClass)
-                {
-                    case "apprentice":
-                        return new Player(name, new Apprentice());
-                    case "1":
-                        return new Player(name, new Apprentice());
-                    default:
-                        continue;
-                }               
+            switch (characterClass)
+            {
+                case "apprentice":
+                    return new Player(name, new Apprentice());
+                case "1":
+                    return new Player(name, new Apprentice());
+                default:
+                    return new Player(name, new Character());
             }
 
         }

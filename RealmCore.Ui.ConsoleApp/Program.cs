@@ -2,6 +2,7 @@
 using RealmCore.Logic.Interfaces;
 using RealmCore.Logic.Managers;
 using RealmCore.UI.ConsoleApp.Implementations;
+using RealmCore.Logic.Validations;
 
 
 namespace RealmCore.UI.ConsoleApp
@@ -24,6 +25,9 @@ namespace RealmCore.UI.ConsoleApp
             Console.WriteLine("REALMCORE");
             Console.WriteLine("New Game");
             Console.WriteLine("Continue");
+
+          
+
 
             Console.ReadKey();
 

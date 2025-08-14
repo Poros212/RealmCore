@@ -1,4 +1,7 @@
 ﻿using RealmCore.Logic.Interfaces;
+using RealmCore.Logic.Texts;
+using RealmCore.Logic.Validations;
+
 
 namespace RealmCore.UI.ConsoleApp.Implementations
 {
@@ -6,17 +9,21 @@ namespace RealmCore.UI.ConsoleApp.Implementations
     {
         public string EnterName()
         {
-            Console.Write("Enter your character's name: ");
-
-            string inputName = Console.ReadLine();
-
-            while (inputName.Length > 25 || string.IsNullOrWhiteSpace(inputName))
+            while (true)
             {
-                Console.Write("Name cannot be empty or exceed 25 characters. Please enter a valid name: ");
-                inputName = Console.ReadLine();
-            }
+                Console.Write(PlayerCreationTexts.EnterName);
 
-            return inputName;
+                string? inputName = Console.ReadLine();
+
+                ValidationResultDto<string> validation = StringInputValidator.CheckStringInput(inputName);
+
+                if (validation.IsOK)
+                {
+                    return validation.Value!;
+                }
+                
+                UiFormat.DisplayError(validation.ErrorMessage!);
+            }
         }
         public string ChooseCharacter()
         {

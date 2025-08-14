@@ -16,6 +16,8 @@ namespace RealmCore.Logic.Managers
         {
             string name = _playerCreationUI.EnterName();
 
+
+
             string characterClass = _playerCreationUI.ChooseCharacter();
 
             switch (characterClass)

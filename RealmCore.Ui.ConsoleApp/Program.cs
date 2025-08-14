@@ -1,9 +1,6 @@
 ﻿using RealmCore.Logic;
-using RealmCore.Logic.Characters;
-using RealmCore.Logic.Spells;
-using RealmCore.Logic.Effects;
-using RealmCore.Logic.Managers;
 using RealmCore.Logic.Interfaces;
+using RealmCore.Logic.Managers;
 using RealmCore.UI.ConsoleApp.Implementations;
 
 
@@ -24,6 +21,9 @@ namespace RealmCore.UI.ConsoleApp
             Console.WriteLine($"Welcome {playerCharacter.Name}, you have chosen the {playerCharacter.ChosenCharacter.Name} class.");
 
 
+            Console.WriteLine("REALMCORE");
+            Console.WriteLine("New Game");
+            Console.WriteLine("Continue");
 
             Console.ReadKey();
 

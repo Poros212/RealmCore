@@ -1,17 +1,12 @@
-﻿using RealmCore.Logic.Effects;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using RealmCore.Logic.Characters;
+﻿using RealmCore.Logic.Characters;
+using RealmCore.Logic.Effects;
 
 namespace RealmCore.Logic.Spells
 {
     public class Fireball : Spell
     {
         #region Constructor
-        
+
         public Fireball()
         {
             Name = "FireBall";

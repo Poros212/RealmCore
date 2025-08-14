@@ -14,7 +14,7 @@ namespace RealmCore.Logic.Characters
         private int _intelligence;
         private int _defense;
         private int _resistance;
-        private List<Spell> _spellPool; 
+        private List<Spell> _spellPool;
 
         #endregion
 

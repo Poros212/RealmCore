@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace RealmCore.UI.ConsoleApp
+﻿namespace RealmCore.UI.ConsoleApp
 {
     internal class ConsoleIO
     {
 
         #region Outputs
-        public static void DisplayText(string text) 
+        public static void DisplayText(string text)
         {
             Console.WriteLine(text);
         }

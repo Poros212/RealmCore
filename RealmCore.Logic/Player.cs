@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using RealmCore.Logic.Characters;
+﻿using RealmCore.Logic.Characters;
 
 namespace RealmCore.Logic
 {
@@ -18,13 +13,13 @@ namespace RealmCore.Logic
 
         #region Properties
 
-        public string Name 
+        public string Name
         {
             get { return _name; }
             set { _name = value; }
         }
-        public Character ChosenCharacter 
-        { 
+        public Character ChosenCharacter
+        {
             get { return _character; }
             set { _character = value; }
         }
@@ -33,12 +28,12 @@ namespace RealmCore.Logic
 
         #region Constructor
 
-        public Player() 
+        public Player()
         {
             Name = "DefaultName";
             ChosenCharacter = new Character();
         }
-        public Player(string name, Character character) 
+        public Player(string name, Character character)
         {
             Name = name;
             ChosenCharacter = character;

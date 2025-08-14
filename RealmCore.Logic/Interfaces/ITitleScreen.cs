@@ -1,0 +1,17 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace RealmCore.Logic.Interfaces
+{
+    public interface ITitleScreen
+    {
+        string DisplayTitle();
+
+        string DisplayOptions();
+
+        bool IsNewGameSelected();
+    }
+}

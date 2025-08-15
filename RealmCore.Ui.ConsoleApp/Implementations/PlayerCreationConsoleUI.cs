@@ -21,29 +21,30 @@ namespace RealmCore.UI.ConsoleApp.Implementations
                 {
                     return validation.Value!;
                 }
-                
+
                 UiFormat.DisplayError(validation.ErrorMessage!);
             }
         }
         public string ChooseCharacter()
         {
-            Console.Clear();
-            Console.WriteLine("[1] Apprentice\n");
-            Console.Write("Choose your character class: ");
-            string playerChoice = Console.ReadLine().ToLower();
-
             while (true)
             {
+                Console.Clear();
+                Console.WriteLine(PlayerCreationTexts.CharacterOptions);
+                Console.WriteLine();
+                Console.Write(PlayerCreationTexts.ChooseCharacter);
+                string playerChoice = Console.ReadLine().ToLower();
+
+
                 if (playerChoice == "1" || playerChoice == "apprentice")
                 {
                     return playerChoice;
                 }
-
-
-                Console.Write("Invalid choice. Please choose a valid character class: ");
-                playerChoice = Console.ReadLine().ToLower();
+                UiFormat.DisplayError(PlayerCreationTexts.InvalidChoice);
             }
 
         }
+       
+
     }
 }

@@ -12,24 +12,35 @@ namespace RealmCore.Logic.Managers
             _playerCreationUI = ui;
         }
 
+        //public Player CreatePlayer()
+        //{
+        //    string name = _playerCreationUI.EnterName();
+
+        //    string characterClass = _playerCreationUI.ChooseCharacter();
+
+        //    switch (characterClass)
+        //    {
+        //        case "apprentice" or "1":
+        //            return new Player(name, new Apprentice());
+        //        default:
+        //            return new Player(name, new Character());
+        //    }
+
+        //}
         public Player CreatePlayer()
         {
             string name = _playerCreationUI.EnterName();
-
-
 
             string characterClass = _playerCreationUI.ChooseCharacter();
 
             switch (characterClass)
             {
-                case "apprentice":
+                case "apprentice" or "1":
                     return new Player(name, new Apprentice());
-                case "1":
-                    return new Player(name, new Apprentice());
+
                 default:
                     return new Player(name, new Character());
             }
-
         }
     }
 }

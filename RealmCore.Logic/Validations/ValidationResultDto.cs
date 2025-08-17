@@ -6,5 +6,4 @@
         public string? ErrorMessage { get; init; }
         public T? Value { get; init; }
     }
-
 }

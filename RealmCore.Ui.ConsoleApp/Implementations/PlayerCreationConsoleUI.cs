@@ -2,7 +2,6 @@
 using RealmCore.Logic.Texts;
 using RealmCore.Logic.Validations;
 
-
 namespace RealmCore.UI.ConsoleApp.Implementations
 {
     public class PlayerCreationConsoleUI : IPlayerCreationUI
@@ -25,6 +24,7 @@ namespace RealmCore.UI.ConsoleApp.Implementations
                 UiFormat.DisplayError(validation.ErrorMessage!);
             }
         }
+
         public string ChooseCharacter()
         {
             while (true)
@@ -35,16 +35,12 @@ namespace RealmCore.UI.ConsoleApp.Implementations
                 Console.Write(PlayerCreationTexts.ChooseCharacter);
                 string playerChoice = Console.ReadLine().ToLower();
 
-
                 if (playerChoice == "1" || playerChoice == "apprentice")
                 {
                     return playerChoice;
                 }
                 UiFormat.DisplayError(PlayerCreationTexts.InvalidChoice);
             }
-
         }
-       
-
     }
 }

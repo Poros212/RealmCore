@@ -15,18 +15,18 @@ namespace RealmCore.Logic.Managers
 
         public BattleField BattleField { get; set; }
 
-        public BattleManager(Player player)
+        public BattleManager(Player player, int height, int width)
         {
             Player = player;
-            BattleField = new BattleField(player);
+            BattleField = new BattleField(player, height, width);
             InitializeTiles(BattleField);
         }
 
         public void InitializeTiles(BattleField battleField)
         {
-            for (int row = 0; row < 10; row++)
+            for (int row = 0; row < BattleField.Height; row++)
             {
-                for (int col = 0; col < 10; col++)
+                for (int col = 0; col < BattleField.Width; col++)
                 {
                     battleField.TileArray[row, col] = new Tile(row, col);
                 }
@@ -40,9 +40,9 @@ namespace RealmCore.Logic.Managers
 
         public void createGrassTerrainMap()
         {
-            for (int row = 0; row < 10; row++)
+            for (int row = 0; row < BattleField.Height; row++)
             {
-                for (int col = 0; col < 10; col++)
+                for (int col = 0; col < BattleField.Width; col++)
                 {
                     BattleField.TileArray[row, col].Terrain = new GrassTerrain();
                 }

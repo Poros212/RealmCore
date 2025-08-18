@@ -11,8 +11,8 @@ namespace RealmCore.Logic.Maps
     public class BattleField
     {
         private Tile[,] _tileArray;
-        private int width = 10;
-        private int height = 10;
+        private int _width = 15;
+        private int _height = 15;
         private Player _player;
 
         public Tile[,] TileArray
@@ -23,14 +23,14 @@ namespace RealmCore.Logic.Maps
 
         public int Width
         {
-            get { return width; }
-            set { width = value; }
+            get { return _width; }
+            set { _width = value; }
         }
 
         public int Height
         {
-            get { return height; }
-            set { height = value; }
+            get { return _height; }
+            set { _height = value; }
         }
 
         public Player Player
@@ -39,12 +39,12 @@ namespace RealmCore.Logic.Maps
             set { _player = value; }
         }
 
-        public BattleField(Player player)
+        public BattleField(Player player, int height, int width)
         {
-            _tileArray = new Tile[10, 10];
-            width = 10;
-            height = 10;
-            _player = player;
+            Height = height;
+            Width = width;
+            TileArray = new Tile[Height, Width];
+            Player = player;
         }
     }
 }

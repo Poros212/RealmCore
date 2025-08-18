@@ -33,7 +33,7 @@ namespace RealmCore.UI.ConsoleApp
 
             Player player = new Player("Hero", new Apprentice());
 
-            BattleManager battleManager = new BattleManager(player);
+            BattleManager battleManager = new BattleManager(player, 20, 10);
 
             BattlefieldUI battlefieldUi = new BattlefieldUI(battleManager);
 

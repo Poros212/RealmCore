@@ -20,7 +20,7 @@ namespace RealmCore.Logic.Tiles.Terrains
             Description = "This is a default terrain type.";
             MovementCost = 1;
             IsWalkable = true;
-            TerrainImage = " # ";
+            TerrainImage = "%%";
         }
     }
 }

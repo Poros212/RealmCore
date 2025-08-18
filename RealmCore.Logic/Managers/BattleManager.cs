@@ -49,128 +49,77 @@ namespace RealmCore.Logic.Managers
             }
         }
 
-        #region Movement
-
-        public Validations.ValidationResultDto<string> PlayerMovement(string playerMovement)
+        public Validations.ValidationResultDto<string> PlayerMovement(string movement)
         {
-            if (playerMovement == "up" || playerMovement == "8")
-            {
-                int tmpX = Player.XCoordinate;
-                int tmpY = Player.YCoordinate;
+            int deltaX = 0;
+            int deltaY = 0;
 
-                try
-                {
-                    int testX = Player.XCoordinate - 1;
-                    int testY = Player.YCoordinate;
-                    BattleField.TileArray[testX, testY].OccupyingPlayer = Player;
-                }
-                catch (Exception)
-                {
+            switch (movement)
+            {
+                case "up" or "8":
+                    deltaX = -1;
+                    break;
+
+                case "down" or "2":
+                    deltaX = 1;
+                    break;
+
+                case "left" or "4":
+                    deltaY = -1;
+                    break;
+
+                case "right" or "6":
+                    deltaY = 1;
+                    break;
+
+                default:
                     return new Validations.ValidationResultDto<string>
                     {
                         IsOK = false,
-                        ErrorMessage = "You can't move further up!"
+                        ErrorMessage = "Invalid movement command. Use 'up', 'down', 'left', or 'right'."
                     };
-                }
-
-                Player.XCoordinate--;
-                BattleField.TileArray[tmpX, tmpY].OccupyingPlayer = null;
-                return new Validations.ValidationResultDto<string>
-                {
-                    IsOK = true
-                };
             }
-            else if (playerMovement == "down" || playerMovement == "2")
-            {
-                int tmpX = Player.XCoordinate;
-                int tmpY = Player.YCoordinate;
 
-                try
-                {
-                    int testX = Player.XCoordinate + 1;
-                    int testY = Player.YCoordinate;
-                    BattleField.TileArray[testX, testY].OccupyingPlayer = Player;
-                }
-                catch (Exception)
-                {
-                    return new Validations.ValidationResultDto<string>
-                    {
-                        IsOK = false,
-                        ErrorMessage = "You can't move further down!"
-                    };
-                }
+            int newX = Player.XCoordinate + deltaX;
+            int newY = Player.YCoordinate + deltaY;
 
-                Player.XCoordinate++;
-                BattleField.TileArray[tmpX, tmpY].OccupyingPlayer = null;
-                return new Validations.ValidationResultDto<string>
-                {
-                    IsOK = true
-                };
-            }
-            else if (playerMovement == "left" || playerMovement == "4")
-            {
-                int tmpX = Player.XCoordinate;
-                int tmpY = Player.YCoordinate;
-
-                try
-                {
-                    int testX = Player.XCoordinate;
-                    int testY = Player.YCoordinate - 1;
-                    BattleField.TileArray[testX, testY].OccupyingPlayer = Player;
-                }
-                catch (Exception)
-                {
-                    return new Validations.ValidationResultDto<string>
-                    {
-                        IsOK = false,
-                        ErrorMessage = "You can't move further left!"
-                    };
-                }
-
-                Player.YCoordinate--;
-                BattleField.TileArray[tmpX, tmpY].OccupyingPlayer = null;
-                return new Validations.ValidationResultDto<string>
-                {
-                    IsOK = true
-                };
-            }
-            else if (playerMovement == "right" || playerMovement == "6")
-            {
-                int tmpX = Player.XCoordinate;
-                int tmpY = Player.YCoordinate;
-
-                try
-                {
-                    int testX = Player.XCoordinate;
-                    int testY = Player.YCoordinate + 1;
-                    BattleField.TileArray[testX, testY].OccupyingPlayer = Player;
-                }
-                catch (Exception)
-                {
-                    return new Validations.ValidationResultDto<string>
-                    {
-                        IsOK = false,
-                        ErrorMessage = "You can't move further right!"
-                    };
-                }
-
-                Player.YCoordinate++;
-                BattleField.TileArray[tmpX, tmpY].OccupyingPlayer = null;
-                return new Validations.ValidationResultDto<string>
-                {
-                    IsOK = true
-                };
-            }
-            else
+            if (Player.ChosenCharacter.CurrentMovementPoints <= 0)
             {
                 return new Validations.ValidationResultDto<string>
                 {
                     IsOK = false,
-                    ErrorMessage = "Invalid movement command. Use 'up', 'down', 'left', or 'right'."
+                    ErrorMessage = "You don't have enough movement points."
                 };
             }
 
-            #endregion Movement
+            if (newX < 0 || newX > BattleField.Height || newY < 0 || newY > BattleField.Width)
+            {
+                return new Validations.ValidationResultDto<string>
+                {
+                    IsOK = false,
+                    ErrorMessage = "You can't move anymore in that direction"
+                };
+            }
+
+            if (!BattleField.TileArray[newX, newY].Terrain.IsWalkable)
+            {
+                return new Validations.ValidationResultDto<string>
+                {
+                    IsOK = false,
+                    ErrorMessage = "You can't move there, the terrain is not walkable."
+                };
+            }
+
+            BattleField.TileArray[newX, newY].OccupyingPlayer = Player;
+            BattleField.TileArray[Player.XCoordinate, Player.YCoordinate].OccupyingPlayer = null;
+            Player.XCoordinate = newX;
+            Player.YCoordinate = newY;
+            Player.ChosenCharacter.CurrentMovementPoints -= BattleField.TileArray[newX, newY].Terrain.MovementCost;
+
+            return new Validations.ValidationResultDto<string>
+            {
+                IsOK = true
+            };
         }
     }
 }

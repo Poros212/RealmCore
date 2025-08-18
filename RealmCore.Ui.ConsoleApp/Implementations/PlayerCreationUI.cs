@@ -6,7 +6,7 @@ using RealmCore.UI.ConsoleApp.Map;
 
 namespace RealmCore.UI.ConsoleApp.Implementations
 {
-    public class PlayerCreationConsoleUI : IPlayerCreationUI
+    public class PlayerCreationUI : IPlayerCreationUI
     {
         public string EnterName()
         {
@@ -35,20 +35,19 @@ namespace RealmCore.UI.ConsoleApp.Implementations
                 Console.WriteLine(PlayerCreationTexts.CharacterOptions);
                 Console.WriteLine();
                 Console.Write(PlayerCreationTexts.ChooseCharacter);
-                string playerChoice = Console.ReadLine().ToLower();
-
-                if (playerChoice == "1" || playerChoice == "apprentice")
-                {
-                    return playerChoice;
-                }
-                UiFormat.DisplayError(PlayerCreationTexts.InvalidChoice);
+                return Console.ReadLine().ToLower();
+                //string playerChoice = Console.ReadLine().ToLower();
+                //if (playerChoice == "1" || playerChoice == "apprentice")
+                //{
+                //    return playerChoice;
+                //}
+                //UiFormat.DisplayError(PlayerCreationTexts.InvalidChoice);
             }
         }
 
-        //public string PlayerMovement()
-        //{
-        //    Console.Clear();
-        //    Console.Write("move: ");
-        //}
+        public void DisplayError()
+        {
+            UiFormat.DisplayError(PlayerCreationTexts.InvalidChoice);
+        }
     }
 }

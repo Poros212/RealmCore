@@ -1,12 +1,13 @@
-﻿using RealmCore.Logic.Maps;
+﻿using RealmCore.Logic;
+using RealmCore.Logic.Managers;
+using RealmCore.Logic.Maps;
+using RealmCore.Logic.Tiles;
+using RealmCore.Logic.Validations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using RealmCore.Logic.Tiles;
-using RealmCore.Logic;
-using RealmCore.Logic.Managers;
 
 namespace RealmCore.UI.ConsoleApp.Map
 {
@@ -38,9 +39,54 @@ namespace RealmCore.UI.ConsoleApp.Map
                 }
                 else
                 {
-                    Console.Write($"  P  ");
+                    Console.Write($" P1 ");
                 }
             }
+        }
+
+        public void UpdateMapMovement()
+        {
+            while (true)
+            {
+                DisplayMap();
+                Console.Write("move: ");
+                string tmp = Console.ReadLine();
+                ValidationResultDto<string> movementResult = BattleManager.PlayerMovement(tmp);
+                if (movementResult.IsOK == false)
+                {
+                    UiFormat.DisplayError(movementResult.ErrorMessage);
+                    continue;
+                }
+                //DisplayMap();
+                //break;
+            }
+        }
+
+        public void DisplayBattleFieldLegend()
+        {
+            DisplayMap();
+
+            Console.WriteLine("\n\nBattlefield Legend:");
+            var distinctTerrain = BattleManager.BattleField.TileArray
+                .Cast<Tile>()
+                .Select(t => t.Terrain)
+                .DistinctBy(tr => tr.Name)
+                .ToList();
+
+            foreach (var terrain in distinctTerrain)
+            {
+                if (terrain.IsWalkable == true)
+                {
+                    Console.WriteLine($"{terrain.TerrainImage} = {terrain.Name} [movement cost: {terrain.MovementCost}]");
+                }
+                else
+                {
+                    Console.WriteLine($"{terrain.TerrainImage} = {terrain.Name} [Not Walkable]");
+                }
+            }
+
+            Console.WriteLine();
+            UiFormat.UiPressAnyKey();
         }
     }
 }

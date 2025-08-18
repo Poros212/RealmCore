@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 
 namespace RealmCore.Logic.Tiles.Terrains
 {
-    public class GrassTerrain : Terrain
+    public class WaterTerrain : Terrain
     {
-        public GrassTerrain()
+        public WaterTerrain()
         {
-            Name = "Grass";
-            Description = "A patch of grass";
+            Name = "Water";
+            Description = "A shallow pool of water";
             IsWalkable = true;
-            MovementCost = 1;
-            TerrainImage = "..";
+            MovementCost = 2;
+            TerrainImage = "~~";
         }
     }
 }

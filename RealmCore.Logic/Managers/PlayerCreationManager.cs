@@ -22,24 +22,33 @@ namespace RealmCore.Logic.Managers
         //    {
         //        case "apprentice" or "1":
         //            return new Player(name, new Apprentice());
+
         //        default:
         //            return new Player(name, new Character());
         //    }
-
         //}
-        public Player CreatePlayer()
+
+        public Validations.ValidationResultDto<Player> CreatePlayer()
         {
             string name = _playerCreationUI.EnterName();
 
-            string characterClass = _playerCreationUI.ChooseCharacter();
-
-            switch (characterClass)
+            while (true)
             {
-                case "apprentice" or "1":
-                    return new Player(name, new Apprentice());
+                string characterClass = _playerCreationUI.ChooseCharacter();
 
-                default:
-                    return new Player(name, new Character());
+                switch (characterClass)
+                {
+                    case "apprentice" or "1":
+                        return new Validations.ValidationResultDto<Player>
+                        {
+                            IsOK = true,
+                            Value = new Player(name, new Apprentice())
+                        };
+
+                    default:
+                        _playerCreationUI.DisplayError();
+                        continue;
+                }
             }
         }
     }

@@ -17,13 +17,15 @@ namespace RealmCore.UI.ConsoleApp
         {
             Console.WriteLine("Hello, World!");
 
-            //IPlayerCreationUI playerCreationUI = new PlayerCreationConsoleUI();
+            IPlayerCreationUI playerCreationUI = new PlayerCreationUI();
 
-            //PlayerCreationManager playerCreationManager = new PlayerCreationManager(playerCreationUI);
+            PlayerCreationManager playerCreationManager = new PlayerCreationManager(playerCreationUI);
 
             //Player playerCharacter = playerCreationManager.CreatePlayer();
+            //Player player = playerCreationManager.CreatePlayer().Value;
 
-            //Console.WriteLine($"Welcome {playerCharacter.Name}, you have chosen the {playerCharacter.ChosenCharacter.Name} class.");
+            //Console.WriteLine($"Welcome {player.Name}, you have chosen the {player.ChosenCharacter.Name} class.");
+            //Console.ReadKey();
 
             //Console.WriteLine("REALMCORE");
             //Console.WriteLine("New Game");
@@ -42,37 +44,27 @@ namespace RealmCore.UI.ConsoleApp
             //battlefield.Tile[2, 2].OccupyingPlayer = player;
             //battlefield.Tile[5, 5].OccupyingPlayer = null;
 
-            battleManager.createGrassTerrainMap();
+            //battleManager.createGrassTerrainMap();
 
-            battleManager.ModifyTileTerrain(4, 4, new Terrain());
+            battleManager.ModifyTileTerrain(4, 4, new WaterTerrain());
+            battleManager.ModifyTileTerrain(3, 3, new WallTerrain());
 
             player.XCoordinate = 5;
             player.YCoordinate = 5;
 
             battleManager.BattleField.TileArray[player.XCoordinate, player.YCoordinate].OccupyingPlayer = player;
 
-            // battlefieldUi.DisplayMap();
+            //// battlefieldUi.DisplayMap();
 
-            while (true)
-            {
-                battlefieldUi.DisplayMap();
-                Console.Write("move: ");
-                string tmp = Console.ReadLine();
-                ValidationResultDto<string> movementResult = battleManager.PlayerMovement(tmp);
-                if (movementResult.IsOK == false)
-                {
-                    UiFormat.DisplayError(movementResult.ErrorMessage);
-                    continue;
-                }
-
-                //UiFormat.UiPressAnyKey();
-            }
+            //battlefieldUi.UpdateMapMovement();
 
             //battlefield.Tile[5, 5].OccupyingPlayer.Name = "test2";
 
             //Console.WriteLine(player.Name);
 
             //BattlefieldUI test = Battlefield.;
+
+            battlefieldUi.DisplayBattleFieldLegend();
 
             Console.ReadKey();
         }

@@ -1,21 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using RealmCore.Logic.Tiles;
 
 namespace RealmCore.Logic.Maps
 {
     public class BattleField
     {
-        private Tile[,] _tileSet;
+        private Tile[,] _tileArray;
         private int width = 10;
         private int height = 10;
+        private Player _player;
 
-        public Tile[,] TileSet
+        public Tile[,] TileArray
         {
-            get { return _tileSet; }
-            set { _tileSet = value; }
+            get { return _tileArray; }
+            set { _tileArray = value; }
         }
 
         public int Width
@@ -30,22 +33,18 @@ namespace RealmCore.Logic.Maps
             set { height = value; }
         }
 
-        public BattleField()
+        public Player Player
         {
-            _tileSet = new Tile[10, 10];
-            width = 10;
-            height = 10;
+            get { return _player; }
+            set { _player = value; }
         }
 
-        public void InitializeTiles()
+        public BattleField(Player player)
         {
-            for (int row = 0; row < 10; row++)
-            {
-                for (int col = 0; col < 10; col++)
-                {
-                    _tileSet[row, col] = new Tile(row, col, true);
-                }
-            }
+            _tileArray = new Tile[10, 10];
+            width = 10;
+            height = 10;
+            _player = player;
         }
     }
 }

@@ -3,6 +3,11 @@ using RealmCore.Logic.Interfaces;
 using RealmCore.Logic.Managers;
 using RealmCore.Logic.Maps;
 using RealmCore.UI.ConsoleApp.Implementations;
+using RealmCore.UI.ConsoleApp.Map;
+using RealmCore.Logic.Tiles;
+using RealmCore.Logic.Characters;
+using RealmCore.Logic.Tiles.Terrains;
+using RealmCore.Logic.Validations;
 
 namespace RealmCore.UI.ConsoleApp
 {
@@ -24,74 +29,50 @@ namespace RealmCore.UI.ConsoleApp
             //Console.WriteLine("New Game");
             //Console.WriteLine("Continue");
 
-            BattleField battlefield = new BattleField();
+            Player player = new Player("Hero", new Apprentice());
 
-            battlefield.InitializeTiles();
+            BattleManager battleManager = new BattleManager(player);
 
-            //foreach (var tile in battlefield.TileSet)
-            //{
-            //    if (tile.XAxis == 0)
-            //    {
-            //        Console.Write($"[{tile.XAxis},{tile.YAxis}]");
-            //        continue;
-            //    }
-            //}
-            //Console.WriteLine();
-            //foreach (var tile in battlefield.TileSet)
-            //{
-            //    if (tile.XAxis == 1)
-            //    {
-            //        Console.Write($"[{tile.XAxis},{tile.YAxis}]");
-            //        continue;
-            //    }
-            //}
-            //Console.WriteLine();
-            //foreach (var tile in battlefield.TileSet)
-            //{
-            //    if (tile.XAxis == 3)
-            //    {
-            //        Console.Write($"[{tile.XAxis},{tile.YAxis}]");
-            //        continue;
-            //    }
-            //}
-            //Console.WriteLine();
-            //foreach (var tile in battlefield.TileSet)
-            //{
-            //    if (tile.XAxis == 4)
-            //    {
-            //        Console.Write($"[{tile.XAxis},{tile.YAxis}]");
-            //        continue;
-            //    }
-            //}
+            BattlefieldUI battlefieldUi = new BattlefieldUI(battleManager);
 
-            //for (int x = 0; x < battlefield.Width; x++)   // rows
-            //{
-            //    for (int y = 0; y < battlefield.Height; y++)  // columns
-            //    {
-            //        Console.Write($"[{}]");
-            //    }
+            //battlefield.Tile[7, 7] = battlefield.ModifyTile(battlefield.Tile[7, 7], new GrassTile());
 
-            //    // After finishing this row, drop to next line
-            //    Console.WriteLine();
-            //}
+            //battlefield.Tile[5, 5].OccupyingPlayer = player;
 
-            //foreach (Tile tile in battlefield.TileSet)
-            //{
-            //}
+            //battlefield.Tile[2, 2].OccupyingPlayer = player;
+            //battlefield.Tile[5, 5].OccupyingPlayer = null;
 
-            int currentRow = 0;
+            battleManager.createGrassTerrainMap();
 
-            foreach (Tile tile in battlefield.TileSet)
+            battleManager.ModifyTileTerrain(4, 4, new Terrain());
+
+            player.XCoordinate = 5;
+            player.YCoordinate = 5;
+
+            battleManager.BattleField.TileArray[player.XCoordinate, player.YCoordinate].OccupyingPlayer = player;
+
+            // battlefieldUi.DisplayMap();
+
+            while (true)
             {
-                // If we've moved to a new row
-                if (tile.XAxis != currentRow)
+                battlefieldUi.DisplayMap();
+                Console.Write("move: ");
+                string tmp = Console.ReadLine();
+                ValidationResultDto<string> movementResult = battleManager.PlayerMovement(tmp);
+                if (movementResult.IsOK == false)
                 {
-                    Console.WriteLine(); // start a new line
-                    currentRow = tile.XAxis;
+                    UiFormat.DisplayError(movementResult.ErrorMessage);
+                    continue;
                 }
 
-                Console.Write($"[{tile.XAxis}{tile.TileImage}{tile.YAxis}]");
+                //UiFormat.UiPressAnyKey();
             }
+
+            //battlefield.Tile[5, 5].OccupyingPlayer.Name = "test2";
+
+            //Console.WriteLine(player.Name);
+
+            //BattlefieldUI test = Battlefield.;
 
             Console.ReadKey();
         }

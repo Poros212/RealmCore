@@ -1,25 +1,25 @@
-﻿using System;
+﻿using RealmCore.Logic.Tiles.Terrains;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RealmCore.Logic.Maps
+namespace RealmCore.Logic.Tiles
 {
     public class Tile
     {
         #region Fields
 
         private int _xAxis;
+
         private int _yAxis;
 
-        //terrain type
-        //move cost
-        private bool _isPassible;
+        private Terrain _terrain;
+
+        private Player? _occupyingPlayer; //TODO: Implement player occupying tile
 
         private bool _isOccupied;
-
-        private char _tileImage;
 
         #endregion Fields
 
@@ -37,10 +37,10 @@ namespace RealmCore.Logic.Maps
             set { _yAxis = value; }
         }
 
-        public bool IsPassible
+        public Terrain Terrain
         {
-            get { return _isPassible; }
-            set { _isPassible = value; }
+            get { return _terrain; }
+            set { _terrain = value; }
         }
 
         public bool IsOccupied
@@ -49,10 +49,10 @@ namespace RealmCore.Logic.Maps
             set { _isOccupied = value; }
         }
 
-        public char TileImage
+        public Player OccupyingPlayer
         {
-            get { return _tileImage; }
-            set { _tileImage = value; }
+            get { return _occupyingPlayer; }
+            set { _occupyingPlayer = value; }
         }
 
         #endregion Properties
@@ -61,18 +61,18 @@ namespace RealmCore.Logic.Maps
         {
             XAxis = 0;
             YAxis = 0;
-            IsPassible = true;
+            Terrain = new GrassTerrain(); // Default terrain type
             IsOccupied = false;
-            TileImage = '.';
+            OccupyingPlayer = null; // No player occupies the tile by default
         }
 
-        public Tile(int x, int y, bool isPassible)
+        public Tile(int x, int y)
         {
             XAxis = x;
             YAxis = y;
-            IsPassible = isPassible;
+            Terrain = new Terrain();
             IsOccupied = false;
-            TileImage = '.';
+            OccupyingPlayer = null; // No player occupies the tile by default
         }
     }
 }

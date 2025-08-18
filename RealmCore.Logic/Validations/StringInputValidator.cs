@@ -6,7 +6,6 @@
 
         public static ValidationResultDto<string> CheckStringInput(string? value)
         {
-
             if (value == null)
             {
                 return new ValidationResultDto<string>
@@ -37,5 +36,17 @@
                 Value = value
             };
         }
+
+        //public static ValidationResultDto<string> CheckIfInput(bool check)
+        //{
+        //    if (check)
+        //    {
+        //        return new ValidationResultDto<string>
+        //        {
+        //            IsOK = true,
+        //            Value = null
+        //        };
+        //    }
+        //}
     }
 }

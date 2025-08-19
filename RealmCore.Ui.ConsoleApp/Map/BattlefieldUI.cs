@@ -1,4 +1,5 @@
 ﻿using RealmCore.Logic;
+using RealmCore.Logic.Controls;
 using RealmCore.Logic.Managers;
 using RealmCore.Logic.Maps;
 using RealmCore.Logic.Tiles;
@@ -22,7 +23,6 @@ namespace RealmCore.UI.ConsoleApp.Map
 
         public void DisplayMap()
         {
-            Console.Clear();
             int currentRow = 0;
 
             foreach (Tile tile in BattleManager.BattleField.TileArray)
@@ -44,28 +44,39 @@ namespace RealmCore.UI.ConsoleApp.Map
             }
         }
 
-        public void UpdateMapMovement()
+        public void MovementMenu()
         {
             while (true)
             {
+                Console.Clear();
+                Console.WriteLine($"Movment Points: {BattleManager.Player.ChosenCharacter.CurrentMovementPoints} / {BattleManager.Player.ChosenCharacter.MaxMovementPoints}");
+                Console.WriteLine();
                 DisplayMap();
-                Console.Write("move: ");
-                string tmp = Console.ReadLine();
+                DisplayBattleFieldLegend();
+                Console.WriteLine("\n\nMovement Options:");
+                Console.WriteLine($"{ControlMapping.MovementUP} - Move Up");
+                Console.WriteLine($"{ControlMapping.MovementLEFT} - Move Left");
+                Console.WriteLine($"{ControlMapping.MovementDOWN} - Move Down");
+                Console.WriteLine($"{ControlMapping.MovementRIGHT} - Move Right");
+                Console.WriteLine($"\n{ControlMapping.ExitMenu} - Exit Movement Menu");
+                Console.Write("\nAction: ");
+                string tmp = Console.ReadLine().ToLower();
                 ValidationResultDto<string> movementResult = BattleManager.PlayerMovement(tmp);
                 if (movementResult.IsOK == false)
                 {
+                    if (movementResult.ErrorMessage == "exit")
+                    {
+                        Console.Clear();
+                        return; // Exit the movement menu
+                    }
                     UiFormat.DisplayError(movementResult.ErrorMessage);
                     continue;
                 }
-                //DisplayMap();
-                //break;
             }
         }
 
         public void DisplayBattleFieldLegend()
         {
-            DisplayMap();
-
             Console.WriteLine("\n\nBattlefield Legend:");
             var distinctTerrain = BattleManager.BattleField.TileArray
                 .Cast<Tile>()
@@ -84,9 +95,6 @@ namespace RealmCore.UI.ConsoleApp.Map
                     Console.WriteLine($"{terrain.TerrainImage} = {terrain.Name} [Not Walkable]");
                 }
             }
-
-            Console.WriteLine();
-            UiFormat.UiPressAnyKey();
         }
     }
 }

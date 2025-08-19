@@ -1,13 +1,14 @@
 ﻿using RealmCore.Logic;
+using RealmCore.Logic.Characters;
 using RealmCore.Logic.Interfaces;
 using RealmCore.Logic.Managers;
 using RealmCore.Logic.Maps;
-using RealmCore.UI.ConsoleApp.Implementations;
-using RealmCore.UI.ConsoleApp.Map;
 using RealmCore.Logic.Tiles;
-using RealmCore.Logic.Characters;
 using RealmCore.Logic.Tiles.Terrains;
 using RealmCore.Logic.Validations;
+using RealmCore.UI.ConsoleApp.Implementations;
+using RealmCore.UI.ConsoleApp.Map;
+using System.Runtime.InteropServices;
 
 namespace RealmCore.UI.ConsoleApp
 {
@@ -15,6 +16,9 @@ namespace RealmCore.UI.ConsoleApp
     {
         private static void Main(string[] args)
         {
+            Console.WriteLine("Console maximized to full window.");
+            Console.ReadKey();
+
             Console.WriteLine("Hello, World!");
 
             IPlayerCreationUI playerCreationUI = new PlayerCreationUI();
@@ -64,7 +68,9 @@ namespace RealmCore.UI.ConsoleApp
 
             //BattlefieldUI test = Battlefield.;
 
-            battlefieldUi.DisplayBattleFieldLegend();
+            battlefieldUi.MovementMenu();
+
+            //battlefieldUi.DisplayBattleFieldLegend();
 
             Console.ReadKey();
         }

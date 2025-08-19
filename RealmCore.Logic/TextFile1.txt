@@ -1,0 +1,7 @@
+﻿Todo 
+- add colors to terrain
+- add colors to other stuff
+- add a format to center stuff on screen
+
+Current task
+drawing the movement menu is causing a buffer issue to redraw some lines

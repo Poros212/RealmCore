@@ -4,6 +4,7 @@ using RealmCore.Logic.Tiles.Terrains;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -54,29 +55,38 @@ namespace RealmCore.Logic.Managers
             int deltaX = 0;
             int deltaY = 0;
 
+            movement = movement.ToLower();
+
             switch (movement)
             {
-                case "up" or "8":
+                case string upCheck when upCheck == Controls.ControlMapping.MovementUP:
                     deltaX = -1;
                     break;
 
-                case "down" or "2":
+                case string downCheck when downCheck == Controls.ControlMapping.MovementDOWN:
                     deltaX = 1;
                     break;
 
-                case "left" or "4":
+                case string leftCheck when leftCheck == Controls.ControlMapping.MovementLEFT:
                     deltaY = -1;
                     break;
 
-                case "right" or "6":
+                case string rightCheck when rightCheck == Controls.ControlMapping.MovementRIGHT:
                     deltaY = 1;
                     break;
+
+                case string exitCheck when exitCheck == Controls.ControlMapping.ExitMenu:
+                    return new Validations.ValidationResultDto<string>
+                    {
+                        IsOK = false,
+                        ErrorMessage = "exit"
+                    };
 
                 default:
                     return new Validations.ValidationResultDto<string>
                     {
                         IsOK = false,
-                        ErrorMessage = "Invalid movement command. Use 'up', 'down', 'left', or 'right'."
+                        ErrorMessage = "Invalid movement command"
                     };
             }
 
@@ -88,7 +98,7 @@ namespace RealmCore.Logic.Managers
                 return new Validations.ValidationResultDto<string>
                 {
                     IsOK = false,
-                    ErrorMessage = "You don't have enough movement points."
+                    ErrorMessage = "You don't have enough movement points"
                 };
             }
 
@@ -106,7 +116,7 @@ namespace RealmCore.Logic.Managers
                 return new Validations.ValidationResultDto<string>
                 {
                     IsOK = false,
-                    ErrorMessage = "You can't move there, the terrain is not walkable."
+                    ErrorMessage = "You can't move there, the terrain is not walkable"
                 };
             }
 
@@ -121,5 +131,23 @@ namespace RealmCore.Logic.Managers
                 IsOK = true
             };
         }
+
+        //public void BattleMenu(string input)
+        //{
+        //    switch (input)
+        //    {
+        //        case "1" or "move":
+        //            //PlayerMovement();
+        //            ;
+        //            case "2" or "attack":
+
+        //            break;
+        //        default:
+        //    }
+        //}
+
+        //public Validations.ValidationResultDto<string> MovementMenu(string input)
+        //{
+        //}
     }
 }

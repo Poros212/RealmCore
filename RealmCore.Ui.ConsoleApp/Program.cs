@@ -8,7 +8,10 @@ using RealmCore.Logic.Tiles.Terrains;
 using RealmCore.Logic.Validations;
 using RealmCore.UI.ConsoleApp.Implementations;
 using RealmCore.UI.ConsoleApp.Map;
+using Spectre.Console;
 using System.Runtime.InteropServices;
+using RealmCore.Logic.Controls;
+using RealmCore.Logic.Spells;
 
 namespace RealmCore.UI.ConsoleApp
 {
@@ -16,10 +19,8 @@ namespace RealmCore.UI.ConsoleApp
     {
         private static void Main(string[] args)
         {
-            Console.WriteLine("Console maximized to full window.");
+            //ConsoleWindow.EnsureMaximizedOnce();
             Console.ReadKey();
-
-            Console.WriteLine("Hello, World!");
 
             IPlayerCreationUI playerCreationUI = new PlayerCreationUI();
 
@@ -36,8 +37,9 @@ namespace RealmCore.UI.ConsoleApp
             //Console.WriteLine("Continue");
 
             Player player = new Player("Hero", new Apprentice());
+            Player enemy = new Player("Enemy", new Apprentice());
 
-            BattleManager battleManager = new BattleManager(player, 20, 10);
+            BattleManager battleManager = new BattleManager(player, enemy, 20, 10);
 
             BattlefieldUI battlefieldUi = new BattlefieldUI(battleManager);
 
@@ -48,15 +50,18 @@ namespace RealmCore.UI.ConsoleApp
             //battlefield.Tile[2, 2].OccupyingPlayer = player;
             //battlefield.Tile[5, 5].OccupyingPlayer = null;
 
-            //battleManager.createGrassTerrainMap();
+            battleManager.createGrassTerrainMap();
 
             battleManager.ModifyTileTerrain(4, 4, new WaterTerrain());
             battleManager.ModifyTileTerrain(3, 3, new WallTerrain());
 
             player.XCoordinate = 5;
             player.YCoordinate = 5;
+            enemy.XCoordinate = 15;
+            enemy.YCoordinate = 5;
 
             battleManager.BattleField.TileArray[player.XCoordinate, player.YCoordinate].OccupyingPlayer = player;
+            battleManager.BattleField.TileArray[enemy.XCoordinate, enemy.YCoordinate].OccupyingPlayer = enemy;
 
             //// battlefieldUi.DisplayMap();
 
@@ -68,7 +73,31 @@ namespace RealmCore.UI.ConsoleApp
 
             //BattlefieldUI test = Battlefield.;
 
-            battlefieldUi.MovementMenu();
+            //            ConsoleWindow.RenderThreeColumn(
+            //    left: battlefieldUi.DisplayBattleFieldLegend,   // your method that writes to Console
+            //    center: battlefieldUi.DisplayMap,                 // your map renderer (Console.Write/Line)
+            //    right: () =>
+            //    {
+            //        Console.WriteLine("Movement Options:");
+            //        Console.WriteLine($"{ControlMapping.MovementUP} - Move Up");
+            //        Console.WriteLine($"{ControlMapping.MovementLEFT} - Move Left");
+            //        Console.WriteLine($"{ControlMapping.MovementDOWN} - Move Down");
+            //        Console.WriteLine($"{ControlMapping.MovementRIGHT} - Move Right");
+            //        Console.WriteLine($"{ControlMapping.ExitMenu} - Exit");
+            //    },
+            //    leftWidth: 28,
+            //    rightWidth: 28,
+            //    leftTitle: "Legend",
+            //    centerTitle: "Battlefield",
+            //    rightTitle: "Controls"
+            //);
+            SpellCasting spellCasting = new SpellCasting(new Fireball(), player, battleManager.BattleField);
+            SpellCastingUi ui = new SpellCastingUi(battlefieldUi);
+            spellCasting.CastSpell(ui);
+            SpellCasting spellCasting2 = new SpellCasting(new Fireball(), enemy, battleManager.BattleField);
+            spellCasting2.CastSpell(ui);
+
+            //battlefieldUi.MovementMenu();
 
             //battlefieldUi.DisplayBattleFieldLegend();
 

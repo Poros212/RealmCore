@@ -12,13 +12,15 @@ namespace RealmCore.Logic.Managers
 {
     public class BattleManager
     {
-        public Player Player { get; set; }
+        public Player Player1 { get; set; }
+        public Player Opponent1 { get; set; }
 
         public BattleField BattleField { get; set; }
 
-        public BattleManager(Player player, int height, int width)
+        public BattleManager(Player player, Player opponent, int height, int width)
         {
-            Player = player;
+            Player1 = player;
+            Opponent1 = opponent;
             BattleField = new BattleField(player, height, width);
             InitializeTiles(BattleField);
         }
@@ -90,10 +92,10 @@ namespace RealmCore.Logic.Managers
                     };
             }
 
-            int newX = Player.XCoordinate + deltaX;
-            int newY = Player.YCoordinate + deltaY;
+            int newX = Player1.XCoordinate + deltaX;
+            int newY = Player1.YCoordinate + deltaY;
 
-            if (Player.ChosenCharacter.CurrentMovementPoints <= 0)
+            if (Player1.ChosenCharacter.CurrentMovementPoints <= 0)
             {
                 return new Validations.ValidationResultDto<string>
                 {
@@ -120,34 +122,16 @@ namespace RealmCore.Logic.Managers
                 };
             }
 
-            BattleField.TileArray[newX, newY].OccupyingPlayer = Player;
-            BattleField.TileArray[Player.XCoordinate, Player.YCoordinate].OccupyingPlayer = null;
-            Player.XCoordinate = newX;
-            Player.YCoordinate = newY;
-            Player.ChosenCharacter.CurrentMovementPoints -= BattleField.TileArray[newX, newY].Terrain.MovementCost;
+            BattleField.TileArray[newX, newY].OccupyingPlayer = Player1;
+            BattleField.TileArray[Player1.XCoordinate, Player1.YCoordinate].OccupyingPlayer = null;
+            Player1.XCoordinate = newX;
+            Player1.YCoordinate = newY;
+            Player1.ChosenCharacter.CurrentMovementPoints -= BattleField.TileArray[newX, newY].Terrain.MovementCost;
 
             return new Validations.ValidationResultDto<string>
             {
                 IsOK = true
             };
         }
-
-        //public void BattleMenu(string input)
-        //{
-        //    switch (input)
-        //    {
-        //        case "1" or "move":
-        //            //PlayerMovement();
-        //            ;
-        //            case "2" or "attack":
-
-        //            break;
-        //        default:
-        //    }
-        //}
-
-        //public Validations.ValidationResultDto<string> MovementMenu(string input)
-        //{
-        //}
     }
 }

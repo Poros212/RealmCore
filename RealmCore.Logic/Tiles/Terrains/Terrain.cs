@@ -13,6 +13,7 @@ namespace RealmCore.Logic.Tiles.Terrains
         public int MovementCost { get; set; }
         public bool IsWalkable { get; set; }
         public string TerrainImage { get; set; }
+        public string? Color { get; set; }
 
         public Terrain()
         {
@@ -21,6 +22,7 @@ namespace RealmCore.Logic.Tiles.Terrains
             MovementCost = 1;
             IsWalkable = true;
             TerrainImage = "%%";
+            Color = "grey";
         }
     }
 }

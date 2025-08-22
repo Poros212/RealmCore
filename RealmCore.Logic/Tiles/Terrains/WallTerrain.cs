@@ -14,7 +14,8 @@ namespace RealmCore.Logic.Tiles.Terrains
             Description = "A solid wall that blocks movement";
             IsWalkable = false;
             MovementCost = 0;
-            TerrainImage = "[]";
+            TerrainImage = "##";
+            Color = "grey";
         }
     }
 }

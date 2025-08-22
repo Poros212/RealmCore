@@ -1,14 +1,11 @@
 ﻿using RealmCore.Logic;
 using RealmCore.Logic.Controls;
 using RealmCore.Logic.Managers;
-using RealmCore.Logic.Maps;
 using RealmCore.Logic.Tiles;
 using RealmCore.Logic.Validations;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using Spectre.Console;
+using Spectre.Console.Rendering;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace RealmCore.UI.ConsoleApp.Map
 {
@@ -35,11 +32,54 @@ namespace RealmCore.UI.ConsoleApp.Map
                 }
                 if (tile.OccupyingPlayer == null)
                 {
-                    Console.Write($" {tile.Terrain.TerrainImage} ");
+                    string color = tile.Terrain.Color;
+                    AnsiConsole.Markup($" [{color}]{tile.Terrain.TerrainImage}[/] ");
                 }
                 else
                 {
-                    Console.Write($" P1 ");
+                    if (tile.OccupyingPlayer == BattleManager.Player1)
+                    {
+                        AnsiConsole.Markup($"[rapidblink cyan] P1 [/]");
+                    }
+                    else if (tile.OccupyingPlayer == BattleManager.Opponent1)
+                    {
+                        AnsiConsole.Markup($"[rapidblink red] E1 [/]");
+                    }
+                }
+            }
+        }
+
+        public void DisplayMapWithSpell(string image, int x, int y)
+        {
+            int currentRow = 0;
+
+            foreach (Tile tile in BattleManager.BattleField.TileArray)
+            {
+                // If we've moved to a new row
+                if (tile.XAxis != currentRow)
+                {
+                    Console.WriteLine(); // start a new line
+                    currentRow = tile.XAxis;
+                }
+                if (tile.OccupyingPlayer != null)
+                {
+                    if (tile.OccupyingPlayer == BattleManager.Player1)
+                    {
+                        AnsiConsole.Markup($"[rapidblink cyan] P1 [/]");
+                    }
+                    else if (tile.OccupyingPlayer == BattleManager.Opponent1)
+                    {
+                        AnsiConsole.Markup($"[rapidblink red] E1 [/]");
+                    }
+                }
+                else if (tile.XAxis == x && tile.YAxis == y)
+                {
+                    AnsiConsole.Markup($" [yellow]{image}[/] ");
+                }
+                else if (tile.OccupyingPlayer == null)
+                {
+                    string color = tile.Terrain.Color;
+                    AnsiConsole.Markup($" [{color}]{tile.Terrain.TerrainImage}[/] ");
                 }
             }
         }
@@ -48,8 +88,8 @@ namespace RealmCore.UI.ConsoleApp.Map
         {
             while (true)
             {
-                Console.Clear();
-                Console.WriteLine($"Movment Points: {BattleManager.Player.ChosenCharacter.CurrentMovementPoints} / {BattleManager.Player.ChosenCharacter.MaxMovementPoints}");
+                AnsiConsole.Clear();
+                Console.WriteLine($"Movment Points: {BattleManager.Player1.ChosenCharacter.CurrentMovementPoints} / {BattleManager.Player1.ChosenCharacter.MaxMovementPoints}");
                 Console.WriteLine();
                 DisplayMap();
                 DisplayBattleFieldLegend();
@@ -66,7 +106,7 @@ namespace RealmCore.UI.ConsoleApp.Map
                 {
                     if (movementResult.ErrorMessage == "exit")
                     {
-                        Console.Clear();
+                        AnsiConsole.Clear();
                         return; // Exit the movement menu
                     }
                     UiFormat.DisplayError(movementResult.ErrorMessage);

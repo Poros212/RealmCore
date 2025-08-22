@@ -15,6 +15,7 @@ namespace RealmCore.Logic.Tiles.Terrains
             IsWalkable = true;
             MovementCost = 1;
             TerrainImage = "..";
+            Color = "darkgreen";
         }
     }
 }

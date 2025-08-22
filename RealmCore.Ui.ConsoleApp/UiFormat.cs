@@ -1,4 +1,6 @@
 ﻿using RealmCore.Logic.Texts;
+using Spectre.Console;
+using Spectre.Console.Rendering;
 
 namespace RealmCore.UI.ConsoleApp
 {
@@ -18,7 +20,7 @@ namespace RealmCore.UI.ConsoleApp
             Console.Write(GeneralTexts.PressAnyKeyToContinue);
             Console.ResetColor();
             Console.ReadKey(true);
-            Console.Clear();
+            AnsiConsole.Clear();
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace RealmCore.Logic.Managers
 {
-    class StartScreenManager
+    internal class StartScreenManager
     {
         private readonly ITitleScreen _titleScreen;
 
@@ -10,7 +10,6 @@ namespace RealmCore.Logic.Managers
         {
             _titleScreen = titleScreen;
         }
-
 
         public void DisplayStartScreen()
         {
@@ -20,7 +19,7 @@ namespace RealmCore.Logic.Managers
 
         public void NewOrContinue()
         {
-            if (_titleScreen.IsNewGameSelected() == true)
+            if (_titleScreen.IsNewGameSelected())
             {
                 // Start a new game
             }
@@ -29,8 +28,5 @@ namespace RealmCore.Logic.Managers
                 // Load an existing game or exit
             }
         }
-
-
     }
 }
-

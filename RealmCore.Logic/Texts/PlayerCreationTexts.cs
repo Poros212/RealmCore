@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace RealmCore.Logic.Texts
+﻿namespace RealmCore.Logic.Texts
 {
     public static class PlayerCreationTexts
     {
         public const string EnterName = "Enter your character's name: ";
+
+        public const string ChooseCharacter = "Choose your character class: ";
+
+        public const string InvalidChoice = "Invalid choice";
+
+        public const string CharacterOptions = "[1] Apprentice\n";
     }
 }

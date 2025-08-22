@@ -12,6 +12,8 @@ namespace RealmCore.Logic.Characters
             MaxMana = 10;
             CurrentMana = 10;
             SpellPool.Add(new Fireball());
+            MaxMovementPoints = 3;
+            CurrentMovementPoints = 3;
         }
     }
 }

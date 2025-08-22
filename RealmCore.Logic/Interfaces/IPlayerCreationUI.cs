@@ -3,6 +3,9 @@
     public interface IPlayerCreationUI
     {
         string EnterName();
+
         string ChooseCharacter();
+
+        void DisplayError();
     }
 }

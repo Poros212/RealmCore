@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace RealmCore.Logic.Validations
+﻿namespace RealmCore.Logic.Validations
 {
     public static class StringInputValidator
     {
@@ -12,7 +6,6 @@ namespace RealmCore.Logic.Validations
 
         public static ValidationResultDto<string> CheckStringInput(string? value)
         {
-
             if (value == null)
             {
                 return new ValidationResultDto<string>
@@ -43,5 +36,17 @@ namespace RealmCore.Logic.Validations
                 Value = value
             };
         }
+
+        //public static ValidationResultDto<string> CheckIfInput(bool check)
+        //{
+        //    if (check)
+        //    {
+        //        return new ValidationResultDto<string>
+        //        {
+        //            IsOK = true,
+        //            Value = null
+        //        };
+        //    }
+        //}
     }
 }

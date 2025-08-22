@@ -15,7 +15,7 @@ namespace RealmCore.Logic.Spells
         private int _duration;
         private Guid _id;
 
-        #endregion
+        #endregion Fields
 
         #region Properties
 
@@ -24,40 +24,52 @@ namespace RealmCore.Logic.Spells
             get { return _name; }
             set { _name = value; }
         }
+
         public string Description
         {
             get { return _description; }
             set { _description = value; }
         }
+
         public int ManaCost
         {
             get { return _manaCost; }
             set { _manaCost = value; }
         }
+
         public Effect Effect
         {
             get { return _effect; }
             set { _effect = value; }
         }
+
         public int EffectValue
         {
             get { return _effectValue; }
             set { _effectValue = value; }
         }
+
         public int Duration
         {
             get { return _duration; }
             set { _duration = value; }
         }
+
         public Guid Id
         {
             get { return _id; }
             set { _id = value; }
         }
 
-        #endregion
+        public string AreaOfEffect { get; set; }
+
+        public int XRange { get; set; } = 1;
+        public int YRange { get; set; } = 1;
+
+        #endregion Properties
 
         #region Constructor
+
         public Spell()
         {
             Name = "DefaultSpell";
@@ -67,10 +79,13 @@ namespace RealmCore.Logic.Spells
             EffectValue = 0;
             Duration = 0;
             Id = Guid.NewGuid();
+            AreaOfEffect = "Single";
+            XRange = 1;
+            YRange = 1;
         }
 
         public abstract void CastSpell(Character caster, Character target);
 
-        #endregion
+        #endregion Constructor
     }
 }

@@ -15,8 +15,10 @@ namespace RealmCore.Logic.Characters
         private int _defense;
         private int _resistance;
         private List<Spell> _spellPool;
+        private int _maxMovementPoints;
+        private int _currentMovementPoints;
 
-        #endregion
+        #endregion Fields
 
         #region Properties
 
@@ -25,48 +27,68 @@ namespace RealmCore.Logic.Characters
             get { return _name; }
             set { _name = value; }
         }
+
         public int MaxHealth
         {
             get { return _maxHealth; }
             set { _maxHealth = value; }
         }
+
         public int CurrentHealth
         {
             get { return _currentHealth; }
             set { _currentHealth = value; }
         }
+
         public int MaxMana
         {
             get { return _maxMana; }
             set { _maxMana = value; }
         }
+
         public int CurrentMana
         {
             get { return _currentMana; }
             set { _currentMana = value; }
         }
+
         public int Intelligence
         {
             get { return _intelligence; }
             set { _intelligence = value; }
         }
+
         public int Defense
         {
             get { return _defense; }
             set { _defense = value; }
         }
+
         public int Resistance
         {
             get { return _resistance; }
             set { _resistance = value; }
         }
+
         public List<Spell> SpellPool
         {
             get { return _spellPool; }
             set { _spellPool = value; }
         }
 
-        #endregion
+        public int MaxMovementPoints
+        {
+            get { return _maxMovementPoints; }
+            set { _maxMovementPoints = value; }
+        }
+
+        public int CurrentMovementPoints
+        {
+            get { return _currentMovementPoints; }
+            set { _currentMovementPoints = value; }
+        }
+
+        #endregion Properties
 
         #region Constructor
 
@@ -81,8 +103,10 @@ namespace RealmCore.Logic.Characters
             Defense = 0;
             Resistance = 0;
             SpellPool = new List<Spell>();
+            MaxMovementPoints = 1;
+            CurrentMovementPoints = 1;
         }
 
-        #endregion
+        #endregion Constructor
     }
 }

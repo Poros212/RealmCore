@@ -1,0 +1,9 @@
+﻿Todo 
+- add colors to terrain
+- add colors to other stuff
+- add a format to center stuff on screen
+- add terrain effects to spells ex burn
+- make a terrain effect class which essentially turn one terrain type into another (ex grass + burn effect = fire tile 2 turns then grass again))
+
+Current task
+drawing the movement menu is causing a buffer issue to redraw some lines

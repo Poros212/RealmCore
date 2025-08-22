@@ -1,11 +1,12 @@
 ﻿using RealmCore.Logic.Interfaces;
+using RealmCore.Logic.Managers;
 using RealmCore.Logic.Texts;
 using RealmCore.Logic.Validations;
-
+using RealmCore.UI.ConsoleApp.Map;
 
 namespace RealmCore.UI.ConsoleApp.Implementations
 {
-    public class PlayerCreationConsoleUI : IPlayerCreationUI
+    public class PlayerCreationUI : IPlayerCreationUI
     {
         public string EnterName()
         {
@@ -21,29 +22,23 @@ namespace RealmCore.UI.ConsoleApp.Implementations
                 {
                     return validation.Value!;
                 }
-                
+
                 UiFormat.DisplayError(validation.ErrorMessage!);
             }
         }
+
         public string ChooseCharacter()
         {
             Console.Clear();
-            Console.WriteLine("[1] Apprentice\n");
-            Console.Write("Choose your character class: ");
-            string playerChoice = Console.ReadLine().ToLower();
+            Console.WriteLine(PlayerCreationTexts.CharacterOptions);
+            Console.WriteLine();
+            Console.Write(PlayerCreationTexts.ChooseCharacter);
+            return Console.ReadLine().ToLower();
+        }
 
-            while (true)
-            {
-                if (playerChoice == "1" || playerChoice == "apprentice")
-                {
-                    return playerChoice;
-                }
-
-
-                Console.Write("Invalid choice. Please choose a valid character class: ");
-                playerChoice = Console.ReadLine().ToLower();
-            }
-
+        public void DisplayError()
+        {
+            UiFormat.DisplayError(PlayerCreationTexts.InvalidChoice);
         }
     }
 }

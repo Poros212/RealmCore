@@ -16,4 +16,8 @@
     <ProjectReference Include="..\RealmCore.Logic\RealmCore.Logic.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Map\" />
+  </ItemGroup>
+
 </Project>

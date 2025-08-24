@@ -2,7 +2,6 @@
 using RealmCore.Logic.Managers;
 using RealmCore.Logic.Texts;
 using RealmCore.Logic.Validations;
-using RealmCore.UI.ConsoleApp.Map;
 
 namespace RealmCore.UI.ConsoleApp.Implementations
 {

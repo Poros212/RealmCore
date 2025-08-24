@@ -10,6 +10,7 @@ namespace RealmCore.Logic
         private Character _character;
         private int _xCoordinate;
         private int _yCoordinate;
+        private Guid _id;
 
         #endregion Fields
 
@@ -39,6 +40,11 @@ namespace RealmCore.Logic
             set { _yCoordinate = value; }
         }
 
+        public Guid PlayerId
+        {
+            get { return _id; }
+        }
+
         #endregion Properties
 
         #region Constructor
@@ -49,6 +55,7 @@ namespace RealmCore.Logic
             ChosenCharacter = new Character();
             XCoordinate = -1;
             YCoordinate = -1;
+            _id = Guid.NewGuid();
         }
 
         public Player(string name, Character character)
@@ -57,6 +64,7 @@ namespace RealmCore.Logic
             ChosenCharacter = character;
             XCoordinate = 1;
             YCoordinate = 1;
+            _id = Guid.NewGuid();
         }
 
         #endregion Constructor

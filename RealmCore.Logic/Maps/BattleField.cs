@@ -163,14 +163,6 @@ namespace RealmCore.Logic.Maps
             int newX = player.XCoordinate + deltaX;
             int newY = player.YCoordinate + deltaY;
 
-            if (player.ChosenCharacter.CurrentMovementPoints <= 0 || player.ChosenCharacter.CurrentMovementPoints < TileArray[newX, newY].Terrain.MovementCost)
-            {
-                return new Validations.ValidationResultDto<string>
-                {
-                    IsOK = false,
-                    ErrorMessage = "You don't have enough movement points"
-                };
-            }
             if (InBounds(newX, newY) != true)
             {
                 return new Validations.ValidationResultDto<string>
@@ -193,6 +185,14 @@ namespace RealmCore.Logic.Maps
                 {
                     IsOK = false,
                     ErrorMessage = "You can't move there, the tile is already occupied"
+                };
+            }
+            if (player.ChosenCharacter.CurrentMovementPoints <= 0 || player.ChosenCharacter.CurrentMovementPoints < TileArray[newX, newY].Terrain.MovementCost)
+            {
+                return new Validations.ValidationResultDto<string>
+                {
+                    IsOK = false,
+                    ErrorMessage = "You don't have enough movement points"
                 };
             }
 

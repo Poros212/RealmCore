@@ -28,18 +28,13 @@ namespace RealmCore.UI.ConsoleApp
             Enemy enemy1 = new Enemy("Goblin", new Apprentice());
             enemies.Add(enemy1);
 
-            BattleField battleField = new BattleField(10, 10);
+            BattleField battleField = new BattleField(15, 15);
             BattleContext battleContext = new BattleContext(players, enemies, battleField);
             BattleManager battleManager = new BattleManager(battleContext, null);
             BattlefieldUI battlefieldUI = new BattlefieldUI(battleManager);
             battleManager.BattlefieldImplementation = battlefieldUI;
 
             battleManager.StartBattle();
-            battleManager.TestTurnOrderDisplay();
-
-            battlefieldUI.DisplayMap();
-
-            battlefieldUI.TryMove();
 
             Console.ReadKey();
         }

@@ -8,7 +8,7 @@ namespace RealmCore.Logic.Interfaces
 {
     public interface IBattlefield
     {
-        string TryMove();
+        string TryMove(Player player);
 
         void ShowError(string message);
     }

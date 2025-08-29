@@ -28,6 +28,8 @@ namespace RealmCore.Logic.Managers
         public void StartBattle()
         {
             CreateTurnOrder();
+            PlaceActorsOnField();
+            BattleFlow();
         }
 
         public void CreateTurnOrder()
@@ -49,30 +51,42 @@ namespace RealmCore.Logic.Managers
                 .ToList();
         }
 
-        public void TestTurnOrderDisplay()
+        public void PlaceActorsOnField()
         {
-            int x = 0;
-            int y = 0;
+            foreach (var actor in TurnOrder)
+            {
+                if (actor.typeFlag == "Player")
+                {
+                    int y = 7;
+                    CTX.BattleField.PlaceActor(actor, (CTX.BattleField.Height - 1), y);
+                    y++;
+                }
+                else
+                {
+                    int y = 7;
+                    CTX.BattleField.PlaceActor(actor, 0, y);
+                    y++;
+                }
+            }
+        }
 
+        public void BattleFlow()
+        {
             foreach (var actor in TurnOrder)
             {
                 ActiveActor = actor;
-                CTX.BattleField.PlaceActor(ActiveActor, x, y);
-                x++;
-                y++;
-            }
-
-            while (true)
-            {
-                var temp = CTX.BattleField.MoveActor(ActiveActor, BattlefieldImplementation.TryMove());
-
-                if (temp.IsOK == false && temp.ErrorMessage != "exit")
+                while (true)
                 {
-                    BattlefieldImplementation.ShowError(temp.ErrorMessage);
-                }
-                else if (temp.ErrorMessage == "exit")
-                {
-                    break;
+                    string? errorMessage = CTX.BattleField.MoveActor(ActiveActor, BattlefieldImplementation.TryMove(ActiveActor)).ErrorMessage;
+
+                    if (errorMessage != null && errorMessage != "exit")
+                    {
+                        BattlefieldImplementation.ShowError(errorMessage);
+                    }
+                    else if (errorMessage == "exit")
+                    {
+                        break;
+                    }
                 }
             }
         }

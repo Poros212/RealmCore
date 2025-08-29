@@ -13,6 +13,7 @@ namespace RealmCore.Logic
         {
             Name = name;
             ChosenCharacter = character;
+            typeFlag = "enemy";
         }
     }
 }

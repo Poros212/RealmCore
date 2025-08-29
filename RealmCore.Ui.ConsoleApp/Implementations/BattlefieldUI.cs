@@ -47,9 +47,13 @@ namespace RealmCore.UI.ConsoleApp.Implementations
                     //{
                     //    AnsiConsole.Markup($"[rapidblink red] E1 [/]");
                     //}
-                    if (tile.OccupyingPlayer != null)
+                    if (tile.OccupyingPlayer != null && tile.OccupyingPlayer.typeFlag == "Player")
                     {
-                        AnsiConsole.Markup($"[rapidblink cyan] PE [/]");
+                        AnsiConsole.Markup($"[rapidblink cyan] PL [/]");
+                    }
+                    else if (tile.OccupyingPlayer != null && tile.OccupyingPlayer.typeFlag == "Enemy")
+                    {
+                        AnsiConsole.Markup($"[rapidblink red] EN [/]");
                     }
                 }
             }
@@ -90,41 +94,10 @@ namespace RealmCore.UI.ConsoleApp.Implementations
         //    }
         //}
 
-        //public void MovementMenu()
-        //{
-        //    while (true)
-        //    {
-        //        AnsiConsole.Clear();
-        //        Console.WriteLine($"Movment Points: {BattleManager.Player1.ChosenCharacter.CurrentMovementPoints} / {BattleManager.Player1.ChosenCharacter.MaxMovementPoints}");
-        //        Console.WriteLine();
-        //        DisplayMap();
-        //        DisplayBattleFieldLegend();
-        //        Console.WriteLine("\n\nMovement Options:");
-        //        Console.WriteLine($"{ControlMapping.MovementUP} - Move Up");
-        //        Console.WriteLine($"{ControlMapping.MovementLEFT} - Move Left");
-        //        Console.WriteLine($"{ControlMapping.MovementDOWN} - Move Down");
-        //        Console.WriteLine($"{ControlMapping.MovementRIGHT} - Move Right");
-        //        Console.WriteLine($"\n{ControlMapping.ExitMenu} - Exit Movement Menu");
-        //        Console.Write("\nAction: ");
-        //        string tmp = Console.ReadLine().ToLower();
-        //        ValidationResultDto<string> movementResult = BattleManager.PlayerMovement(tmp);
-        //        if (movementResult.IsOK == false)
-        //        {
-        //            if (movementResult.ErrorMessage == "exit")
-        //            {
-        //                AnsiConsole.Clear();
-        //                return; // Exit the movement menu
-        //            }
-        //            UiFormat.DisplayError(movementResult.ErrorMessage);
-        //            continue;
-        //        }
-        //    }
-        //}
-
-        public string TryMove()
+        public string TryMove(Player player)
         {
             AnsiConsole.Clear();
-            Console.WriteLine($"Movment Points: {BattleManager.ActiveActor.ChosenCharacter.CurrentMovementPoints} / {BattleManager.ActiveActor.ChosenCharacter.MaxMovementPoints}");
+            Console.WriteLine($"Movment Points: {player.ChosenCharacter.CurrentMovementPoints} / {player.ChosenCharacter.MaxMovementPoints}");
             Console.WriteLine();
             DisplayMap();
             DisplayBattleFieldLegend();

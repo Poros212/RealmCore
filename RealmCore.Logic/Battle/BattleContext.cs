@@ -10,17 +10,17 @@ namespace RealmCore.Logic.Battle
 {
     public sealed class BattleContext
     {
-        public List<Player> Players { get; }
-        public List<Enemy> Enemies { get; }
-        public BattleField BattleField { get; }
+        public List<Player> Players { get; set; }
+        public List<Enemy> Enemies { get; set; }
+        public BattleField BattleField { get; set; }
         public int Turn { get; set; } = 1;
         public Guid? ActivePlayerId { get; set; } = null;
 
-        public BattleContext(IEnumerable<Player> players, IEnumerable<Enemy> enemies, BattleField battleField)
+        public BattleContext(List<Player> players, List<Enemy> enemies, BattleField field)
         {
-            Players = players.ToList();
-            Enemies = enemies.ToList();
-            BattleField = battleField;
+            Players = players;
+            Enemies = enemies;
+            BattleField = field;
         }
     }
 }

@@ -1,17 +1,15 @@
 ﻿using RealmCore.Logic.Characters;
 
-
 namespace RealmCore.Logic.Effects
 {
-    public class DamageEffect : Effect
+    public sealed class DamageEffect : IEffect
     {
+        public static DamageEffect Instance { get; } = new DamageEffect();
 
-        public DamageEffect()
-        {
-            EffectType = "DamageEffect";
-        }
+        private DamageEffect()
+        { }
 
-        public override void ApplyEffect(int value, int duration, Character caster, Character target)
+        public void ApplyEffect(int value, int duration, Character caster, Character target)
         {
             target.CurrentHealth -= value;
         }

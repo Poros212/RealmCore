@@ -12,7 +12,7 @@ namespace RealmCore.Logic
         private int _yCoordinate;
         private Guid _id;
         public string typeFlag;
-        private bool isAlive = true;
+        public bool isAlive = true;
 
         #endregion Fields
 
@@ -53,6 +53,12 @@ namespace RealmCore.Logic
             set { isAlive = value; }
         }
 
+        public string TypeFlag
+        {
+            get { return typeFlag; }
+            set { typeFlag = value; }
+        }
+
         #endregion Properties
 
         #region Constructor
@@ -64,7 +70,7 @@ namespace RealmCore.Logic
             XCoordinate = -1;
             YCoordinate = -1;
             _id = Guid.NewGuid();
-            typeFlag = "player";
+            TypeFlag = "player";
             IsAlive = true;
         }
 
@@ -75,7 +81,7 @@ namespace RealmCore.Logic
             XCoordinate = 1;
             YCoordinate = 1;
             _id = Guid.NewGuid();
-            typeFlag = "player";
+            TypeFlag = "player";
             IsAlive = true;
         }
 

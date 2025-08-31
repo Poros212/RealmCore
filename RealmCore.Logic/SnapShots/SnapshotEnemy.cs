@@ -10,14 +10,14 @@ namespace RealmCore.Logic.SnapShots
     public class SnapshotEnemy
     {
         public string Name { get; }
-        public Character ChosenCharacter { get; }
+        public SnapshotCharacter ChosenCharacter { get; }
         public int XCoordinate { get; }
         public int YCoordinate { get; }
         public Guid PlayerId { get; }
         public bool IsAlive { get; }
         public string TypeFlag { get; }
 
-        public SnapshotEnemy(string name, Character chosenCharacter, int xCoordinate, int yCoordinate, Guid playerId, bool isAlive, string typeFlag)
+        public SnapshotEnemy(string name, SnapshotCharacter chosenCharacter, int xCoordinate, int yCoordinate, Guid playerId, bool isAlive, string typeFlag)
         {
             Name = name;
             ChosenCharacter = chosenCharacter;

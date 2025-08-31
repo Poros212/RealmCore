@@ -12,8 +12,8 @@ namespace RealmCore.Logic.Spells
             Name = "FireBall";
             Description = "Throw a flaming ball of fire at the enemy";
             ManaCost = 3;
-            Effect = new DamageEffect();
             EffectValue = 1;
+            //Effect = DamageEffect;
             Duration = 1;
             Id = Guid.NewGuid();
             AreaOfEffect = "Single";
@@ -23,7 +23,7 @@ namespace RealmCore.Logic.Spells
 
         public override void CastSpell(Character caster, Character target)
         {
-            Effect.ApplyEffect(EffectValue, Duration, caster, target);
+            DamageEffect.Instance.ApplyEffect(EffectValue, Duration, caster, target);
         }
 
         #endregion Constructor

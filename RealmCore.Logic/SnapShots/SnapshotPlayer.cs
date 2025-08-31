@@ -12,14 +12,14 @@ namespace RealmCore.Logic.SnapShots
     public sealed class SnapshotPlayer
     {
         public string Name { get; }
-        public Character ChosenCharacter { get; }
+        public SnapshotCharacter ChosenCharacter { get; }
         public int XCoordinate { get; }
         public int YCoordinate { get; }
         public Guid PlayerId { get; }
         public bool IsAlive { get; }
         public string TypeFlag { get; }
 
-        public SnapshotPlayer(string name, Character chosenCharacter, int xCoordinate, int yCoordinate, Guid playerId, bool isAlive, string typeFlag)
+        public SnapshotPlayer(string name, SnapshotCharacter chosenCharacter, int xCoordinate, int yCoordinate, Guid playerId, bool isAlive, string typeFlag)
         {
             Name = name;
             ChosenCharacter = chosenCharacter;

@@ -13,7 +13,7 @@ namespace RealmCore.Logic.SnapShots
         public IReadOnlyList<SnapshotEnemy> Enemies { get; }
         public SnapshotBattlefield Battlefield { get; }
         public int Turn { get; }
-        public Guid? ActivePlayerId { get; }
+        public Guid? ActiveActorId { get; }
 
         public SnapshotBattleContext(
             IReadOnlyList<SnapshotPlayer> players,
@@ -26,7 +26,7 @@ namespace RealmCore.Logic.SnapShots
             Enemies = enemies;
             Battlefield = battlefield;
             Turn = turn;
-            ActivePlayerId = activePlayerId;
+            ActiveActorId = activePlayerId;
         }
     }
 }

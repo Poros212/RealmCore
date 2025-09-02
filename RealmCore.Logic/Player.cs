@@ -42,7 +42,7 @@ namespace RealmCore.Logic
             set { _yCoordinate = value; }
         }
 
-        public Guid PlayerId
+        public Guid ActorId
         {
             get { return _id; }
         }

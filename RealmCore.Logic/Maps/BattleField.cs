@@ -100,7 +100,7 @@ namespace RealmCore.Logic.Maps
                     ErrorMessage = "Tile is already occupied"
                 };
             }
-            if (_actors.ContainsKey(player.PlayerId) == true)
+            if (_actors.ContainsKey(player.ActorId) == true)
             {
                 return new Validations.ValidationResultDto<string>
                 {
@@ -110,7 +110,7 @@ namespace RealmCore.Logic.Maps
             }
 
             TileArray[x, y].OccupyingPlayer = player;
-            _actors.Add(player.PlayerId, (x, y));
+            _actors.Add(player.ActorId, (x, y));
             player.XCoordinate = x;
             player.YCoordinate = y;
 
@@ -201,7 +201,7 @@ namespace RealmCore.Logic.Maps
             player.XCoordinate = newX;
             player.YCoordinate = newY;
             player.ChosenCharacter.CurrentMovementPoints -= TileArray[newX, newY].Terrain.MovementCost;
-            _actors[player.PlayerId] = (newX, newY);
+            _actors[player.ActorId] = (newX, newY);
 
             return new Validations.ValidationResultDto<string>
             {

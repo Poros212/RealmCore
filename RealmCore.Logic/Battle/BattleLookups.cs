@@ -12,7 +12,7 @@ namespace RealmCore.Logic.Battle
         {
             foreach (var player in ctx.Players)
             {
-                if (player.PlayerId == playerId)
+                if (player.ActorId == playerId)
                 {
                     return player;
                 }

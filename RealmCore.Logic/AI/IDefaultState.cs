@@ -6,15 +6,10 @@ using System.Threading.Tasks;
 
 namespace RealmCore.Logic.AI
 {
-    public class IDefaultState
+    public interface IDefaultState
     {
-        public void TryState()
-        {
-        }
+        public void TryState();
 
-        public IDefaultState ChangeState()
-        {
-            return this;
-        }
+        public IDefaultState ChangeState();
     }
 }

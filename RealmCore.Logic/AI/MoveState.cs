@@ -1,4 +1,5 @@
 ﻿using RealmCore.Logic.Battle;
+using RealmCore.Logic.SnapShots;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,20 +10,10 @@ namespace RealmCore.Logic.AI
 {
     public class MoveState : IDefaultState
     {
-        private BattleContext BattleContext { get; }
-
-        public MoveState(BattleContext ctx)
-        {
-            BattleContext = ctx;
-        }
-
-        public void TryState(Enemy enemy)
-        {
-        }
+        public void TryState()
+        { }
 
         public IDefaultState ChangeState()
-        {
-            return this;
-        }
+        { return this; }
     }
 }

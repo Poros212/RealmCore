@@ -47,11 +47,11 @@ namespace RealmCore.UI.ConsoleApp.Implementations
                     //{
                     //    AnsiConsole.Markup($"[rapidblink red] E1 [/]");
                     //}
-                    if (tile.OccupyingPlayer != null && tile.OccupyingPlayer.typeFlag == "Player")
+                    if (tile.OccupyingPlayer != null && tile.OccupyingPlayer.typeFlag == "player")
                     {
                         AnsiConsole.Markup($"[rapidblink cyan] PL [/]");
                     }
-                    else if (tile.OccupyingPlayer != null && tile.OccupyingPlayer.typeFlag == "Enemy")
+                    else if (tile.OccupyingPlayer != null && tile.OccupyingPlayer.typeFlag == "enemy")
                     {
                         AnsiConsole.Markup($"[rapidblink red] EN [/]");
                     }

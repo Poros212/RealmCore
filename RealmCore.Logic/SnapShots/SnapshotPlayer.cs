@@ -15,7 +15,7 @@ namespace RealmCore.Logic.SnapShots
         public SnapshotCharacter ChosenCharacter { get; }
         public int XCoordinate { get; }
         public int YCoordinate { get; }
-        public Guid PlayerId { get; }
+        public Guid ActorId { get; }
         public bool IsAlive { get; }
         public string TypeFlag { get; }
 
@@ -25,7 +25,7 @@ namespace RealmCore.Logic.SnapShots
             ChosenCharacter = chosenCharacter;
             XCoordinate = xCoordinate;
             YCoordinate = yCoordinate;
-            PlayerId = playerId;
+            ActorId = playerId;
             IsAlive = isAlive;
             TypeFlag = typeFlag;
         }

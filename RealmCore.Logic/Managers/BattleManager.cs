@@ -55,7 +55,7 @@ namespace RealmCore.Logic.Managers
         {
             foreach (var actor in TurnOrder)
             {
-                if (actor.typeFlag == "Player")
+                if (actor.typeFlag == "player")
                 {
                     int y = 7;
                     CTX.BattleField.PlaceActor(actor, (CTX.BattleField.Height - 1), y);

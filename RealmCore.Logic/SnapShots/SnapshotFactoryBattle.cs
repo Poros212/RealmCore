@@ -11,7 +11,7 @@ using System.Xml.Linq;
 
 namespace RealmCore.Logic.SnapShots
 {
-    public static class SnashotFactoryBattle
+    public static class SnapshotFactoryBattle
     {
         public static SnapshotBattleContext CreateSnapshotBattleContext(BattleContext ctx)
         {
@@ -40,10 +40,10 @@ namespace RealmCore.Logic.SnapShots
 
                     if (tile.OccupyingPlayer != null)
                     {
-                        playerId = tile.OccupyingPlayer.PlayerId;
+                        playerId = tile.OccupyingPlayer.ActorId;
                     }
 
-                    snapshotTiles[x, y] = new SnapshotTile
+                    snapshotTiles[row, col] = new SnapshotTile
                         (
                             tile.XAxis,
                             tile.YAxis,
@@ -81,13 +81,13 @@ namespace RealmCore.Logic.SnapShots
                         characterSnapshot,
                         player.XCoordinate,
                         player.YCoordinate,
-                        player.PlayerId,
+                        player.ActorId,
                         player.IsAlive,
                         player.TypeFlag
                     );
 
                 snapshotPlayersList.Add(playerSnapshot);
-                snapshotActorsDict[player.PlayerId] = (player.XCoordinate, player.YCoordinate);
+                snapshotActorsDict[player.ActorId] = (player.XCoordinate, player.YCoordinate);
             }
 
             foreach (var enemy in ctx.Enemies)
@@ -114,13 +114,13 @@ namespace RealmCore.Logic.SnapShots
                         characterSnapshot,
                         enemy.XCoordinate,
                         enemy.YCoordinate,
-                        enemy.PlayerId,
+                        enemy.ActorId,
                         enemy.IsAlive,
                         enemy.TypeFlag
                     );
 
                 snapshotEnemiesList.Add(enemySnapshot);
-                snapshotActorsDict[enemy.PlayerId] = (enemy.XCoordinate, enemy.YCoordinate);
+                snapshotActorsDict[enemy.ActorId] = (enemy.XCoordinate, enemy.YCoordinate);
             }
 
             SnapshotBattlefield snapshotBattleField = new SnapshotBattlefield
@@ -137,7 +137,7 @@ namespace RealmCore.Logic.SnapShots
                     snapshotEnemiesList,
                     snapshotBattleField,
                     ctx.Turn,
-                    ctx.ActivePlayerId
+                    ctx.ActiveActorId
                 );
         }
     }

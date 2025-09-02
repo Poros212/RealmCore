@@ -12,6 +12,8 @@ using System.Runtime.InteropServices;
 using RealmCore.Logic.Controls;
 using RealmCore.Logic.Spells;
 using RealmCore.Logic.Battle;
+using RealmCore.Logic.AI;
+using RealmCore.Logic.SnapShots;
 
 namespace RealmCore.UI.ConsoleApp
 {
@@ -29,10 +31,14 @@ namespace RealmCore.UI.ConsoleApp
             enemies.Add(enemy1);
 
             BattleField battleField = new BattleField(15, 15);
-            BattleContext battleContext = new BattleContext(players, enemies, battleField);
-            BattleManager battleManager = new BattleManager(battleContext, null);
+            BattleContext ctx = new BattleContext(players, enemies, battleField);
+            BattleManager battleManager = new BattleManager(ctx, null);
             BattlefieldUI battlefieldUI = new BattlefieldUI(battleManager);
             battleManager.BattlefieldImplementation = battlefieldUI;
+
+            DefaultAi enemyAi = new DefaultAi(SnapshotFactoryBattle.CreateSnapshotBattleContext(ctx));
+
+            //enemyAi.TakeTurn();
 
             battleManager.StartBattle();
 

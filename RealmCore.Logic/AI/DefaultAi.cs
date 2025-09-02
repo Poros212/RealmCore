@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RealmCore.Logic.SnapShots;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,11 +9,28 @@ namespace RealmCore.Logic.AI
 {
     public class DefaultAi
     {
-        public BattleSnapshot BattleSnapshot { get; }
+        public SnapshotBattleContext CTX { get; }
 
-        public DefaultAi(BattleSnapshot battleSnapshot)
+        public DefaultAi(SnapshotBattleContext ctx)
         {
-            BattleSnapshot = battleSnapshot;
+            CTX = ctx;
+        }
+
+        public IDefaultState TakeTurn()
+        {
+            int moveReward = 0;
+            int attackReward = 0;
+            Dictionary<Guid, int> actorsDistance = new Dictionary<Guid, int>();
+            Dictionary<Guid, int> actorsHealth = new Dictionary<Guid, int>();
+
+            foreach (var actor in CTX.Players)
+            {
+                if (actor.TypeFlag == "player")
+                {
+                }
+            }
+            IDefaultState test = new MoveState();
+            return test;
         }
     }
 }

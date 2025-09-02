@@ -14,7 +14,7 @@ namespace RealmCore.Logic.Battle
         public List<Enemy> Enemies { get; set; }
         public BattleField BattleField { get; set; }
         public int Turn { get; set; } = 1;
-        public Guid? ActivePlayerId { get; set; } = null;
+        public Guid? ActiveActorId { get; set; } = null;
 
         public BattleContext(List<Player> players, List<Enemy> enemies, BattleField field)
         {

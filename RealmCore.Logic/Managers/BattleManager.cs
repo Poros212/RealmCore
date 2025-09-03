@@ -1,6 +1,8 @@
-﻿using RealmCore.Logic.Battle;
+﻿using RealmCore.Logic.AI;
+using RealmCore.Logic.Battle;
 using RealmCore.Logic.Interfaces;
 using RealmCore.Logic.Maps;
+using RealmCore.Logic.SnapShots;
 using RealmCore.Logic.Tiles;
 using RealmCore.Logic.Tiles.Terrains;
 using System;
@@ -75,18 +77,35 @@ namespace RealmCore.Logic.Managers
             foreach (var actor in TurnOrder)
             {
                 ActiveActor = actor;
-                while (true)
-                {
-                    string? errorMessage = CTX.BattleField.MoveActor(ActiveActor, BattlefieldImplementation.TryMove(ActiveActor)).ErrorMessage;
+                CTX.ActiveActorId = actor.ActorId;
 
-                    if (errorMessage != null && errorMessage != "exit")
+                if (actor.TypeFlag == "player" && actor.IsAlive)
+                {
+                    while (true)
                     {
-                        BattlefieldImplementation.ShowError(errorMessage);
+                        string? errorMessage = CTX.BattleField.MoveActor(ActiveActor, BattlefieldImplementation.TryMove(ActiveActor)).ErrorMessage;
+
+                        if (errorMessage != null && errorMessage != "exit")
+                        {
+                            BattlefieldImplementation.ShowError(errorMessage);
+                        }
+                        else if (errorMessage == "exit")
+                        {
+                            break;
+                        }
                     }
-                    else if (errorMessage == "exit")
-                    {
-                        break;
-                    }
+                }
+                else if (actor.TypeFlag == "enemy" && actor.IsAlive)
+                {
+                    var ctxSnap = SnapshotFactoryBattle.CreateSnapshotBattleContext(CTX);
+                    DefaultAi defaultAi = new DefaultAi(ctxSnap);
+                    IDefaultState defaultState = defaultAi.TakeTurn();
+                    defaultState.TryState();
+                }
+                else
+                {
+                    Console.WriteLine("error");
+                    Console.ReadKey();
                 }
             }
         }

@@ -18,19 +18,44 @@ namespace RealmCore.Logic.AI
 
         public IDefaultState TakeTurn()
         {
-            int moveReward = 0;
-            int attackReward = 0;
-            Dictionary<Guid, int> actorsDistance = new Dictionary<Guid, int>();
-            Dictionary<Guid, int> actorsHealth = new Dictionary<Guid, int>();
+            //Dictionary<Guid, int> actorsDistance = new Dictionary<Guid, int>();
+            //Dictionary<Guid, int> actorsHealth = new Dictionary<Guid, int>();
+            //SnapshotEnemy? activeEnemy = null;
 
-            foreach (var actor in CTX.Players)
-            {
-                if (actor.TypeFlag == "player")
-                {
-                }
-            }
-            IDefaultState test = new MoveState();
-            return test;
+            //foreach (var enemy in CTX.Enemies)
+            //{
+            //    if (enemy.ActorId == CTX.ActiveActorId)
+            //    {
+            //        activeEnemy = enemy;
+            //    }
+            //}
+
+            //foreach (var actor in CTX.Players)
+            //{
+            //    if (actor.TypeFlag == "player" && actor.IsAlive)
+            //    {
+            //        int actorx = actor.XCoordinate;
+            //        int actory = actor.YCoordinate;
+
+            //        int distance = Math.Abs(activeEnemy.XCoordinate - actorx) + Math.Abs(activeEnemy.YCoordinate - actory);
+
+            //        actorsDistance.Add(actor.ActorId, distance);
+            //    }
+            //}
+
+            //Guid actorID = Guid.Empty;
+            //int minDistance = int.MaxValue;
+
+            //foreach (var actor in actorsDistance)
+            //{
+            //    if (actor.Value < minDistance)
+            //    {
+            //        minDistance = actor.Value;
+            //        actorID = actor.Key;
+            //    }
+            //}
+
+            //return new MoveState(actorID, minDistance);
         }
     }
 }

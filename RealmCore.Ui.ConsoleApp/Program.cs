@@ -36,7 +36,7 @@ namespace RealmCore.UI.ConsoleApp
             BattlefieldUI battlefieldUI = new BattlefieldUI(battleManager);
             battleManager.BattlefieldImplementation = battlefieldUI;
 
-            DefaultAi enemyAi = new DefaultAi(SnapshotFactoryBattle.CreateSnapshotBattleContext(ctx));
+            //DefaultAi enemyAi = new DefaultAi(SnapshotFactoryBattle.CreateSnapshotBattleContext(ctx));
 
             //enemyAi.TakeTurn();
 

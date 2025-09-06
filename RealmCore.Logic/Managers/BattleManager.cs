@@ -97,10 +97,20 @@ namespace RealmCore.Logic.Managers
                 }
                 else if (actor.TypeFlag == "enemy" && actor.IsAlive)
                 {
-                    var ctxSnap = SnapshotFactoryBattle.CreateSnapshotBattleContext(CTX);
-                    DefaultAi defaultAi = new DefaultAi(ctxSnap);
-                    IDefaultState defaultState = defaultAi.TakeTurn();
-                    defaultState.TryState();
+                    while (true)
+                    {
+                        var ctxSnap = SnapshotFactoryBattle.CreateSnapshotBattleContext(CTX);
+                        DefaultAi defaultAi = new DefaultAi(ctxSnap);
+                        var action = defaultAi.TakeTurn();
+                        if (ActiveActor.ChosenCharacter.CurrentMovementPoints > 0)
+                        {
+                            CTX.BattleField.MoveActor(ActiveActor, action.Value);
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
                 }
                 else
                 {

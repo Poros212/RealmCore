@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using RealmCore.Logic.SnapShots;
+using RealmCore.Logic.Validations;
 
 namespace RealmCore.Logic.AI
 {
@@ -16,59 +17,39 @@ namespace RealmCore.Logic.AI
             CTX = ctx;
         }
 
-        public void TryState()
+        public ValidationResultDto<string> TryState()
         {
-            int moveRange = CTX.Enemies
-                .Where(a => a.ActorId == CTX.ActiveActorId)
-                .Select((b => b.ChosenCharacter.CurrentMovementPoints))
-                .FirstOrDefault();
+            var activeActor = CTX.Enemies.FirstOrDefault(e => e.ActorId == CTX.ActiveActorId);
 
-            while (true)
+            if (activeActor.ChosenCharacter.CurrentMovementPoints > 0)
             {
-                Dictionary<Guid, int> actorsDistance = new Dictionary<Guid, int>();
-                Dictionary<Guid, int> actorsHealth = new Dictionary<Guid, int>();
-                SnapshotEnemy? activeEnemy = null;
-
-                foreach (var enemy in CTX.Enemies)
+                return new MoveState(CTX).TryState();
+            }
+            else
+            {
+                return new ValidationResultDto<string>
                 {
-                    if (enemy.ActorId == CTX.ActiveActorId)
-                    {
-                        activeEnemy = enemy;
-                    }
-                }
-
-                foreach (var actor in CTX.Players)
-                {
-                    if (actor.TypeFlag == "player" && actor.IsAlive)
-                    {
-                        int actorx = actor.XCoordinate;
-                        int actory = actor.YCoordinate;
-
-                        int distance = Math.Abs(activeEnemy.XCoordinate - actorx) + Math.Abs(activeEnemy.YCoordinate - actory);
-
-                        actorsDistance.Add(actor.ActorId, distance);
-                    }
-                }
-
-                Guid actorID = Guid.Empty;
-                int minDistance = int.MaxValue;
-
-                foreach (var actor in actorsDistance)
-                {
-                    if (actor.Value < minDistance)
-                    {
-                        minDistance = actor.Value;
-                        actorID = actor.Key;
-                    }
-                }
-
-                //return new MoveState(actorID, minDistance);
+                    IsOK = true,
+                    ErrorMessage = "No movement points",
+                    Value = "exit"
+                };
             }
         }
 
-        public IDefaultState ChangeState()
+        public ValidationResultDto<string> ChangeState(string value)
         {
-            return this;
+            switch (value)
+            {
+                case "move":
+                    return new MoveState(CTX).TryState();
+
+                default:
+                    return new ValidationResultDto<string>
+                    {
+                        IsOK = false,
+                        ErrorMessage = "Invalid state change"
+                    };
+            }
         }
     }
 }

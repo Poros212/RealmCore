@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RealmCore.Logic.Validations;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,8 +9,8 @@ namespace RealmCore.Logic.AI
 {
     public interface IDefaultState
     {
-        public void TryState();
+        public ValidationResultDto<string> TryState();
 
-        public IDefaultState ChangeState();
+        public ValidationResultDto<string> ChangeState(string value);
     }
 }

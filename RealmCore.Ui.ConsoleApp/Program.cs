@@ -42,6 +42,8 @@ namespace RealmCore.UI.ConsoleApp
 
             battleManager.StartBattle();
 
+            battlefieldUI.DisplayMap();
+
             Console.ReadKey();
         }
     }

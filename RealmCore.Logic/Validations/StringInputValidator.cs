@@ -4,11 +4,11 @@
     {
         private const int MaxLength = 25;
 
-        public static ValidationResultDto<string> CheckStringInput(string? value)
+        public static DtoValidationResult<string> CheckStringInput(string? value)
         {
             if (value == null)
             {
-                return new ValidationResultDto<string>
+                return new DtoValidationResult<string>
                 {
                     IsOK = false,
                     ErrorMessage = "Input cannot be null."
@@ -16,7 +16,7 @@
             }
             if (string.IsNullOrWhiteSpace(value))
             {
-                return new ValidationResultDto<string>
+                return new DtoValidationResult<string>
                 {
                     IsOK = false,
                     ErrorMessage = "Input cannot be empty or whitespace."
@@ -24,13 +24,13 @@
             }
             if (value.Length > MaxLength)
             {
-                return new ValidationResultDto<string>
+                return new DtoValidationResult<string>
                 {
                     IsOK = false,
                     ErrorMessage = $"Input exceeds maximum length of {MaxLength} characters."
                 };
             }
-            return new ValidationResultDto<string>
+            return new DtoValidationResult<string>
             {
                 IsOK = true,
                 Value = value

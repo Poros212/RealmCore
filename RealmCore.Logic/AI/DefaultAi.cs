@@ -17,7 +17,7 @@ namespace RealmCore.Logic.AI
             CTX = ctx;
         }
 
-        public ValidationResultDto<string> TakeTurn()
+        public DtoValidationResult<string> TakeTurn()
         {
             IdleState idleState = new IdleState(CTX);
             return idleState.TryState();

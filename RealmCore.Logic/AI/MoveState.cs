@@ -12,7 +12,25 @@ namespace RealmCore.Logic.AI
             CTX = ctx;
         }
 
-        public ValidationResultDto<string> TryState()
+        public DtoValidationResult<string> TryState()
+        {
+            return TryMoveTowardsPlayer(FindNearestPlayer());
+        }
+
+        public DtoValidationResult<string> ChangeState(string value)
+        {
+            return new DtoValidationResult<string>
+            {
+                IsOK = false,
+                ErrorMessage = "Attack feature not available"
+            };
+        }
+
+        public void SurroundingsCheck()
+        {
+        }
+
+        public Dto_Int_Int_Generic<SnapshotEnemy> FindNearestPlayer()
         {
             int moveRange = CTX.Enemies
                 .Where(a => a.ActorId == CTX.ActiveActorId)
@@ -61,69 +79,70 @@ namespace RealmCore.Logic.AI
                 }
             }
 
+            return new Dto_Int_Int_Generic<SnapshotEnemy>
+            {
+                IsOK = true,
+                ValueX = actorX,
+                ValueY = actorY,
+                GenericObject = activeEnemy
+            };
+        }
+
+        public DtoValidationResult<string> TryMoveTowardsPlayer(Dto_Int_Int_Generic<SnapshotEnemy> dto)
+        {
             if (
-                !(actorX - activeEnemy.XCoordinate == 0 && actorY - activeEnemy.XCoordinate == 1)
+                !(dto.ValueX - dto.GenericObject.XCoordinate == 0 && dto.ValueY - dto.GenericObject.YCoordinate == 1)
                 ||
-                !(actorX - activeEnemy.XCoordinate == 0 && actorY - activeEnemy.XCoordinate == -1)
+                !(dto.ValueX - dto.GenericObject.XCoordinate == 0 && dto.ValueY - dto.GenericObject.YCoordinate == -1)
                 ||
-                !(actorY - activeEnemy.YCoordinate == 0 && actorX - activeEnemy.XCoordinate == 1)
+                !(dto.ValueY - dto.GenericObject.YCoordinate == 0 && dto.ValueX - dto.GenericObject.XCoordinate == 1)
                 ||
-                !(actorY - activeEnemy.YCoordinate == 0 && actorX - activeEnemy.XCoordinate == -1)
+                !(dto.ValueY - dto.GenericObject.YCoordinate == 0 && dto.ValueX - dto.GenericObject.XCoordinate == -1)
                 )
             {
                 // use random to decide direction to move so its not always the same
 
-                if (actorX - activeEnemy.XCoordinate > 0)
+                if (dto.ValueX - dto.GenericObject.XCoordinate > 0)
                 {
                     //move right
-                    return new ValidationResultDto<string>()
+                    return new DtoValidationResult<string>()
                     {
                         IsOK = true,
                         Value = Controls.ControlMapping.MovementDOWN
                     };
                 }
-                if (actorX - activeEnemy.XCoordinate < 0)
+                if (dto.ValueX - dto.GenericObject.XCoordinate < 0)
                 {
                     //move left
-                    return new ValidationResultDto<string>()
+                    return new DtoValidationResult<string>()
                     {
                         IsOK = true,
                         Value = Controls.ControlMapping.MovementUP
                     };
                 }
-                if (actorY - activeEnemy.XCoordinate > 0)
+                if (dto.ValueY - dto.GenericObject.YCoordinate > 0)
                 {
                     //move down
-                    return new ValidationResultDto<string>()
+                    return new DtoValidationResult<string>()
                     {
                         IsOK = true,
                         Value = Controls.ControlMapping.MovementRIGHT
                     };
                 }
-                if (actorY - activeEnemy.XCoordinate < 0)
+                if (dto.ValueY - dto.GenericObject.YCoordinate < 0)
                 {
                     //move up
-                    return new ValidationResultDto<string>()
+                    return new DtoValidationResult<string>()
                     {
                         IsOK = true,
                         Value = Controls.ControlMapping.MovementLEFT
                     };
                 }
             }
-
-            return new ValidationResultDto<string>()
+            return new DtoValidationResult<string>()
             {
                 IsOK = false,
                 ErrorMessage = "No movement needed"
-            };
-        }
-
-        public ValidationResultDto<string> ChangeState(string value)
-        {
-            return new ValidationResultDto<string>
-            {
-                IsOK = false,
-                ErrorMessage = "attack feature not available"
             };
         }
     }

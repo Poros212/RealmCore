@@ -17,7 +17,7 @@ namespace RealmCore.Logic.AI
             CTX = ctx;
         }
 
-        public ValidationResultDto<string> TryState()
+        public DtoValidationResult<string> TryState()
         {
             var activeActor = CTX.Enemies.FirstOrDefault(e => e.ActorId == CTX.ActiveActorId);
 
@@ -27,7 +27,7 @@ namespace RealmCore.Logic.AI
             }
             else
             {
-                return new ValidationResultDto<string>
+                return new DtoValidationResult<string>
                 {
                     IsOK = true,
                     ErrorMessage = "No movement points",
@@ -36,7 +36,7 @@ namespace RealmCore.Logic.AI
             }
         }
 
-        public ValidationResultDto<string> ChangeState(string value)
+        public DtoValidationResult<string> ChangeState(string value)
         {
             switch (value)
             {
@@ -44,7 +44,7 @@ namespace RealmCore.Logic.AI
                     return new MoveState(CTX).TryState();
 
                 default:
-                    return new ValidationResultDto<string>
+                    return new DtoValidationResult<string>
                     {
                         IsOK = false,
                         ErrorMessage = "Invalid state change"

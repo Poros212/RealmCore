@@ -9,8 +9,8 @@ namespace RealmCore.Logic.AI
 {
     public interface IDefaultState
     {
-        public ValidationResultDto<string> TryState();
+        public DtoValidationResult<string> TryState();
 
-        public ValidationResultDto<string> ChangeState(string value);
+        public DtoValidationResult<string> ChangeState(string value);
     }
 }

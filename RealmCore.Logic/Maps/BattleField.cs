@@ -82,11 +82,11 @@ namespace RealmCore.Logic.Maps
 
         #region Updates
 
-        public Validations.ValidationResultDto<string> PlaceActor(Player player, int x, int y)
+        public Validations.DtoValidationResult<string> PlaceActor(Player player, int x, int y)
         {
             if (InBounds(x, y) == false)
             {
-                return new Validations.ValidationResultDto<string>
+                return new Validations.DtoValidationResult<string>
                 {
                     IsOK = false,
                     ErrorMessage = "Position not on map"
@@ -94,7 +94,7 @@ namespace RealmCore.Logic.Maps
             }
             if (IsTileOccupied(x, y) == true)
             {
-                return new Validations.ValidationResultDto<string>
+                return new Validations.DtoValidationResult<string>
                 {
                     IsOK = false,
                     ErrorMessage = "Tile is already occupied"
@@ -102,7 +102,7 @@ namespace RealmCore.Logic.Maps
             }
             if (_actors.ContainsKey(player.ActorId) == true)
             {
-                return new Validations.ValidationResultDto<string>
+                return new Validations.DtoValidationResult<string>
                 {
                     IsOK = false,
                     ErrorMessage = "Player is already placed on the map"
@@ -114,13 +114,13 @@ namespace RealmCore.Logic.Maps
             player.XCoordinate = x;
             player.YCoordinate = y;
 
-            return new Validations.ValidationResultDto<string>
+            return new Validations.DtoValidationResult<string>
             {
                 IsOK = true
             };
         }
 
-        public Validations.ValidationResultDto<string> MoveActor(Player player, string movement)
+        public Validations.DtoValidationResult<string> MoveActor(Player player, string movement)
         {
             int deltaX = 0;
             int deltaY = 0;
@@ -146,14 +146,14 @@ namespace RealmCore.Logic.Maps
                     break;
 
                 case string exitCheck when exitCheck == Controls.ControlMapping.ExitMenu:
-                    return new Validations.ValidationResultDto<string>
+                    return new Validations.DtoValidationResult<string>
                     {
                         IsOK = false,
                         ErrorMessage = "exit"
                     };
 
                 default:
-                    return new Validations.ValidationResultDto<string>
+                    return new Validations.DtoValidationResult<string>
                     {
                         IsOK = false,
                         ErrorMessage = "Invalid movement command"
@@ -165,7 +165,7 @@ namespace RealmCore.Logic.Maps
 
             if (InBounds(newX, newY) != true)
             {
-                return new Validations.ValidationResultDto<string>
+                return new Validations.DtoValidationResult<string>
                 {
                     IsOK = false,
                     ErrorMessage = "You can't move anymore in that direction"
@@ -173,7 +173,7 @@ namespace RealmCore.Logic.Maps
             }
             if (TileArray[newX, newY].Terrain.IsWalkable == false)
             {
-                return new Validations.ValidationResultDto<string>
+                return new Validations.DtoValidationResult<string>
                 {
                     IsOK = false,
                     ErrorMessage = "You can't move there, the terrain is not walkable"
@@ -181,7 +181,7 @@ namespace RealmCore.Logic.Maps
             }
             if (IsTileOccupied(newX, newY) == true)
             {
-                return new Validations.ValidationResultDto<string>
+                return new Validations.DtoValidationResult<string>
                 {
                     IsOK = false,
                     ErrorMessage = "You can't move there, the tile is already occupied"
@@ -189,7 +189,7 @@ namespace RealmCore.Logic.Maps
             }
             if (player.ChosenCharacter.CurrentMovementPoints <= 0 || player.ChosenCharacter.CurrentMovementPoints < TileArray[newX, newY].Terrain.MovementCost)
             {
-                return new Validations.ValidationResultDto<string>
+                return new Validations.DtoValidationResult<string>
                 {
                     IsOK = false,
                     ErrorMessage = "You don't have enough movement points"
@@ -203,7 +203,7 @@ namespace RealmCore.Logic.Maps
             player.ChosenCharacter.CurrentMovementPoints -= TileArray[newX, newY].Terrain.MovementCost;
             _actors[player.ActorId] = (newX, newY);
 
-            return new Validations.ValidationResultDto<string>
+            return new Validations.DtoValidationResult<string>
             {
                 IsOK = true
             };

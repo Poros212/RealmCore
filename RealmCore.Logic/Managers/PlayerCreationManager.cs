@@ -12,7 +12,7 @@ namespace RealmCore.Logic.Managers
             _playerCreationUI = ui;
         }
 
-        public Validations.ValidationResultDto<Player> CreatePlayer()
+        public Validations.DtoValidationResult<Player> CreatePlayer()
         {
             string name = _playerCreationUI.EnterName();
 
@@ -23,7 +23,7 @@ namespace RealmCore.Logic.Managers
                 switch (characterClass)
                 {
                     case "apprentice" or "1":
-                        return new Validations.ValidationResultDto<Player>
+                        return new Validations.DtoValidationResult<Player>
                         {
                             IsOK = true,
                             Value = new Player(name, new Apprentice())

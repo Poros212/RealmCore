@@ -1,4 +1,8 @@
-﻿using RealmCore.Logic.Maps;
+﻿using RealmCore.Logic.AI;
+using RealmCore.Logic.Battle;
+using RealmCore.Logic.Interfaces;
+using RealmCore.Logic.Maps;
+using RealmCore.Logic.SnapShots;
 using RealmCore.Logic.Tiles;
 using RealmCore.Logic.Tiles.Terrains;
 using System;
@@ -12,126 +16,108 @@ namespace RealmCore.Logic.Managers
 {
     public class BattleManager
     {
-        public Player Player1 { get; set; }
-        public Player Opponent1 { get; set; }
+        public BattleContext CTX { get; set; }
+        public IBattlefield? BattlefieldImplementation { get; set; }
+        public List<Player> TurnOrder { get; set; } = new List<Player>();
+        public Player ActiveActor { get; set; }
 
-        public BattleField BattleField { get; set; }
-
-        public BattleManager(Player player, Player opponent, int height, int width)
+        public BattleManager(BattleContext ctx, IBattlefield? battlefieldUi)
         {
-            Player1 = player;
-            Opponent1 = opponent;
-            BattleField = new BattleField(player, height, width);
-            InitializeTiles(BattleField);
+            CTX = ctx;
+            BattlefieldImplementation = battlefieldUi;
         }
 
-        public void InitializeTiles(BattleField battleField)
+        public void StartBattle()
         {
-            for (int row = 0; row < BattleField.Height; row++)
+            CreateTurnOrder();
+            PlaceActorsOnField();
+            BattleFlow();
+        }
+
+        public void CreateTurnOrder()
+        {
+            foreach (var player in CTX.Players)
             {
-                for (int col = 0; col < BattleField.Width; col++)
+                TurnOrder.Add(player);
+            }
+            foreach (var enemy in CTX.Enemies)
+            {
+                TurnOrder.Add(enemy);
+            }
+
+            Random rng = new Random();
+
+            TurnOrder = TurnOrder
+                .OrderByDescending(actor => actor.ChosenCharacter.Speed)
+                .ThenBy(_ => rng.Next())
+                .ToList();
+        }
+
+        public void PlaceActorsOnField()
+        {
+            foreach (var actor in TurnOrder)
+            {
+                if (actor.typeFlag == "player")
                 {
-                    battleField.TileArray[row, col] = new Tile(row, col);
+                    int y = 7;
+                    CTX.BattleField.PlaceActor(actor, (CTX.BattleField.Height - 1), y);
+                    y++;
+                }
+                else
+                {
+                    int y = 7;
+                    CTX.BattleField.PlaceActor(actor, 0, y);
+                    y++;
                 }
             }
         }
 
-        public void ModifyTileTerrain(int x, int y, Terrain terrain)
+        public void BattleFlow()
         {
-            BattleField.TileArray[x, y].Terrain = terrain;
-        }
-
-        public void createGrassTerrainMap()
-        {
-            for (int row = 0; row < BattleField.Height; row++)
+            foreach (var actor in TurnOrder)
             {
-                for (int col = 0; col < BattleField.Width; col++)
+                ActiveActor = actor;
+                CTX.ActiveActorId = actor.ActorId;
+
+                if (actor.TypeFlag == "player" && actor.IsAlive)
                 {
-                    BattleField.TileArray[row, col].Terrain = new GrassTerrain();
+                    while (true)
+                    {
+                        string? errorMessage = CTX.BattleField.MoveActor(ActiveActor, BattlefieldImplementation.TryMove(ActiveActor)).ErrorMessage;
+
+                        if (errorMessage != null && errorMessage != "exit")
+                        {
+                            BattlefieldImplementation.ShowError(errorMessage);
+                        }
+                        else if (errorMessage == "exit")
+                        {
+                            break;
+                        }
+                    }
+                }
+                else if (actor.TypeFlag == "enemy" && actor.IsAlive)
+                {
+                    while (true)
+                    {
+                        var ctxSnap = SnapshotFactoryBattle.CreateSnapshotBattleContext(CTX);
+                        DefaultAi defaultAi = new DefaultAi(ctxSnap);
+                        var action = defaultAi.TakeTurn();
+                        if (ActiveActor.ChosenCharacter.CurrentMovementPoints > 0)
+                        {
+                            CTX.BattleField.MoveActor(ActiveActor, action.Value);
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("error");
+                    Console.ReadKey();
                 }
             }
-        }
-
-        public Validations.ValidationResultDto<string> PlayerMovement(string movement)
-        {
-            int deltaX = 0;
-            int deltaY = 0;
-
-            movement = movement.ToLower();
-
-            switch (movement)
-            {
-                case string upCheck when upCheck == Controls.ControlMapping.MovementUP:
-                    deltaX = -1;
-                    break;
-
-                case string downCheck when downCheck == Controls.ControlMapping.MovementDOWN:
-                    deltaX = 1;
-                    break;
-
-                case string leftCheck when leftCheck == Controls.ControlMapping.MovementLEFT:
-                    deltaY = -1;
-                    break;
-
-                case string rightCheck when rightCheck == Controls.ControlMapping.MovementRIGHT:
-                    deltaY = 1;
-                    break;
-
-                case string exitCheck when exitCheck == Controls.ControlMapping.ExitMenu:
-                    return new Validations.ValidationResultDto<string>
-                    {
-                        IsOK = false,
-                        ErrorMessage = "exit"
-                    };
-
-                default:
-                    return new Validations.ValidationResultDto<string>
-                    {
-                        IsOK = false,
-                        ErrorMessage = "Invalid movement command"
-                    };
-            }
-
-            int newX = Player1.XCoordinate + deltaX;
-            int newY = Player1.YCoordinate + deltaY;
-
-            if (Player1.ChosenCharacter.CurrentMovementPoints <= 0)
-            {
-                return new Validations.ValidationResultDto<string>
-                {
-                    IsOK = false,
-                    ErrorMessage = "You don't have enough movement points"
-                };
-            }
-
-            if (newX < 0 || newX > BattleField.Height || newY < 0 || newY > BattleField.Width)
-            {
-                return new Validations.ValidationResultDto<string>
-                {
-                    IsOK = false,
-                    ErrorMessage = "You can't move anymore in that direction"
-                };
-            }
-
-            if (!BattleField.TileArray[newX, newY].Terrain.IsWalkable)
-            {
-                return new Validations.ValidationResultDto<string>
-                {
-                    IsOK = false,
-                    ErrorMessage = "You can't move there, the terrain is not walkable"
-                };
-            }
-
-            BattleField.TileArray[newX, newY].OccupyingPlayer = Player1;
-            BattleField.TileArray[Player1.XCoordinate, Player1.YCoordinate].OccupyingPlayer = null;
-            Player1.XCoordinate = newX;
-            Player1.YCoordinate = newY;
-            Player1.ChosenCharacter.CurrentMovementPoints -= BattleField.TileArray[newX, newY].Terrain.MovementCost;
-
-            return new Validations.ValidationResultDto<string>
-            {
-                IsOK = true
-            };
         }
     }
 }

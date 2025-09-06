@@ -6,4 +6,4 @@
 - make a terrain effect class which essentially turn one terrain type into another (ex grass + burn effect = fire tile 2 turns then grass again))
 
 Current task
-drawing the movement menu is causing a buffer issue to redraw some lines
+need to do a walkable check for ai, a occupied check, and alternate routing, plus random movement either x or y direction

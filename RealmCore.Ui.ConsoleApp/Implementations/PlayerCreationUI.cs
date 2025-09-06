@@ -2,7 +2,6 @@
 using RealmCore.Logic.Managers;
 using RealmCore.Logic.Texts;
 using RealmCore.Logic.Validations;
-using RealmCore.UI.ConsoleApp.Map;
 
 namespace RealmCore.UI.ConsoleApp.Implementations
 {
@@ -16,7 +15,7 @@ namespace RealmCore.UI.ConsoleApp.Implementations
 
                 string? inputName = Console.ReadLine();
 
-                ValidationResultDto<string> validation = StringInputValidator.CheckStringInput(inputName);
+                DtoValidationResult<string> validation = StringInputValidator.CheckStringInput(inputName);
 
                 if (validation.IsOK)
                 {

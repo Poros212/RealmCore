@@ -7,11 +7,13 @@ using RealmCore.Logic.Tiles;
 using RealmCore.Logic.Tiles.Terrains;
 using RealmCore.Logic.Validations;
 using RealmCore.UI.ConsoleApp.Implementations;
-using RealmCore.UI.ConsoleApp.Map;
 using Spectre.Console;
 using System.Runtime.InteropServices;
 using RealmCore.Logic.Controls;
 using RealmCore.Logic.Spells;
+using RealmCore.Logic.Battle;
+using RealmCore.Logic.AI;
+using RealmCore.Logic.SnapShots;
 
 namespace RealmCore.UI.ConsoleApp
 {
@@ -19,87 +21,28 @@ namespace RealmCore.UI.ConsoleApp
     {
         private static void Main(string[] args)
         {
-            //ConsoleWindow.EnsureMaximizedOnce();
-            Console.ReadKey();
+            List<Player> players = new List<Player>();
+            List<Enemy> enemies = new List<Enemy>();
 
-            IPlayerCreationUI playerCreationUI = new PlayerCreationUI();
+            Player player1 = new Player("Hero", new Apprentice());
+            players.Add(player1);
 
-            PlayerCreationManager playerCreationManager = new PlayerCreationManager(playerCreationUI);
+            Enemy enemy1 = new Enemy("Goblin", new Apprentice());
+            enemies.Add(enemy1);
 
-            //Player playerCharacter = playerCreationManager.CreatePlayer();
-            //Player player = playerCreationManager.CreatePlayer().Value;
+            BattleField battleField = new BattleField(15, 15);
+            BattleContext ctx = new BattleContext(players, enemies, battleField);
+            BattleManager battleManager = new BattleManager(ctx, null);
+            BattlefieldUI battlefieldUI = new BattlefieldUI(battleManager);
+            battleManager.BattlefieldImplementation = battlefieldUI;
 
-            //Console.WriteLine($"Welcome {player.Name}, you have chosen the {player.ChosenCharacter.Name} class.");
-            //Console.ReadKey();
+            //DefaultAi enemyAi = new DefaultAi(SnapshotFactoryBattle.CreateSnapshotBattleContext(ctx));
 
-            //Console.WriteLine("REALMCORE");
-            //Console.WriteLine("New Game");
-            //Console.WriteLine("Continue");
+            //enemyAi.TakeTurn();
 
-            Player player = new Player("Hero", new Apprentice());
-            Player enemy = new Player("Enemy", new Apprentice());
+            battleManager.StartBattle();
 
-            BattleManager battleManager = new BattleManager(player, enemy, 20, 10);
-
-            BattlefieldUI battlefieldUi = new BattlefieldUI(battleManager);
-
-            //battlefield.Tile[7, 7] = battlefield.ModifyTile(battlefield.Tile[7, 7], new GrassTile());
-
-            //battlefield.Tile[5, 5].OccupyingPlayer = player;
-
-            //battlefield.Tile[2, 2].OccupyingPlayer = player;
-            //battlefield.Tile[5, 5].OccupyingPlayer = null;
-
-            battleManager.createGrassTerrainMap();
-
-            battleManager.ModifyTileTerrain(4, 4, new WaterTerrain());
-            battleManager.ModifyTileTerrain(3, 3, new WallTerrain());
-
-            player.XCoordinate = 5;
-            player.YCoordinate = 5;
-            enemy.XCoordinate = 15;
-            enemy.YCoordinate = 5;
-
-            battleManager.BattleField.TileArray[player.XCoordinate, player.YCoordinate].OccupyingPlayer = player;
-            battleManager.BattleField.TileArray[enemy.XCoordinate, enemy.YCoordinate].OccupyingPlayer = enemy;
-
-            //// battlefieldUi.DisplayMap();
-
-            //battlefieldUi.UpdateMapMovement();
-
-            //battlefield.Tile[5, 5].OccupyingPlayer.Name = "test2";
-
-            //Console.WriteLine(player.Name);
-
-            //BattlefieldUI test = Battlefield.;
-
-            //            ConsoleWindow.RenderThreeColumn(
-            //    left: battlefieldUi.DisplayBattleFieldLegend,   // your method that writes to Console
-            //    center: battlefieldUi.DisplayMap,                 // your map renderer (Console.Write/Line)
-            //    right: () =>
-            //    {
-            //        Console.WriteLine("Movement Options:");
-            //        Console.WriteLine($"{ControlMapping.MovementUP} - Move Up");
-            //        Console.WriteLine($"{ControlMapping.MovementLEFT} - Move Left");
-            //        Console.WriteLine($"{ControlMapping.MovementDOWN} - Move Down");
-            //        Console.WriteLine($"{ControlMapping.MovementRIGHT} - Move Right");
-            //        Console.WriteLine($"{ControlMapping.ExitMenu} - Exit");
-            //    },
-            //    leftWidth: 28,
-            //    rightWidth: 28,
-            //    leftTitle: "Legend",
-            //    centerTitle: "Battlefield",
-            //    rightTitle: "Controls"
-            //);
-            SpellCasting spellCasting = new SpellCasting(new Fireball(), player, battleManager.BattleField);
-            SpellCastingUi ui = new SpellCastingUi(battlefieldUi);
-            spellCasting.CastSpell(ui);
-            SpellCasting spellCasting2 = new SpellCasting(new Fireball(), enemy, battleManager.BattleField);
-            spellCasting2.CastSpell(ui);
-
-            //battlefieldUi.MovementMenu();
-
-            //battlefieldUi.DisplayBattleFieldLegend();
+            battlefieldUI.DisplayMap();
 
             Console.ReadKey();
         }

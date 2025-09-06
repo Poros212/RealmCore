@@ -17,6 +17,7 @@ namespace RealmCore.Logic.Characters
         private List<Spell> _spellPool;
         private int _maxMovementPoints;
         private int _currentMovementPoints;
+        private int speed;
 
         #endregion Fields
 
@@ -88,6 +89,12 @@ namespace RealmCore.Logic.Characters
             set { _currentMovementPoints = value; }
         }
 
+        public int Speed
+        {
+            get { return speed; }
+            set { speed = value; }
+        }
+
         #endregion Properties
 
         #region Constructor
@@ -105,6 +112,7 @@ namespace RealmCore.Logic.Characters
             SpellPool = new List<Spell>();
             MaxMovementPoints = 1;
             CurrentMovementPoints = 1;
+            Speed = 1;
         }
 
         #endregion Constructor

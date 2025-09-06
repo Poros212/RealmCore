@@ -17,9 +17,7 @@ namespace RealmCore.Logic.Tiles
 
         private Terrain _terrain;
 
-        private Player? _occupyingPlayer; //TODO: Implement player occupying tile
-
-        private bool _isOccupied;
+        private Player? _occupyingPlayer;
 
         #endregion Fields
 
@@ -28,13 +26,11 @@ namespace RealmCore.Logic.Tiles
         public int XAxis
         {
             get { return _xAxis; }
-            set { _xAxis = value; }
         }
 
         public int YAxis
         {
             get { return _yAxis; }
-            set { _yAxis = value; }
         }
 
         public Terrain Terrain
@@ -43,35 +39,19 @@ namespace RealmCore.Logic.Tiles
             set { _terrain = value; }
         }
 
-        public bool IsOccupied
-        {
-            get { return _isOccupied; }
-            set { _isOccupied = value; }
-        }
-
-        public Player OccupyingPlayer
+        public Player? OccupyingPlayer
         {
             get { return _occupyingPlayer; }
-            set { _occupyingPlayer = value; }
+            internal set { _occupyingPlayer = value; }
         }
 
         #endregion Properties
 
-        public Tile()
-        {
-            XAxis = 0;
-            YAxis = 0;
-            Terrain = new GrassTerrain(); // Default terrain type
-            IsOccupied = false;
-            OccupyingPlayer = null; // No player occupies the tile by default
-        }
-
         public Tile(int x, int y)
         {
-            XAxis = x;
-            YAxis = y;
-            Terrain = new Terrain();
-            IsOccupied = false;
+            _xAxis = x;
+            _yAxis = y;
+            Terrain = new GrassTerrain();
             OccupyingPlayer = null; // No player occupies the tile by default
         }
     }

@@ -45,12 +45,12 @@ namespace RealmCore.Logic.Managers
                 TurnOrder.Add(enemy);
             }
 
-            Random rng = new Random();
+            //Random rng = new Random();
 
-            TurnOrder = TurnOrder
-                .OrderByDescending(actor => actor.ChosenCharacter.Speed)
-                .ThenBy(_ => rng.Next())
-                .ToList();
+            //TurnOrder = TurnOrder
+            //    .OrderByDescending(actor => actor.ChosenCharacter.Speed)
+            //    .ThenBy(_ => rng.Next())
+            //    .ToList();
         }
 
         public void PlaceActorsOnField()
@@ -72,7 +72,7 @@ namespace RealmCore.Logic.Managers
             }
         }
 
-        public void BattleFlow()
+        public void BattleTurn()
         {
             foreach (var actor in TurnOrder)
             {
@@ -97,6 +97,8 @@ namespace RealmCore.Logic.Managers
                 }
                 else if (actor.TypeFlag == "enemy" && actor.IsAlive)
                 {
+                    List<Tile> tilesWalked = new List<Tile>();
+
                     while (true)
                     {
                         var ctxSnap = SnapshotFactoryBattle.CreateSnapshotBattleContext(CTX);
@@ -104,10 +106,17 @@ namespace RealmCore.Logic.Managers
                         var action = defaultAi.TakeTurn();
                         if (ActiveActor.ChosenCharacter.CurrentMovementPoints > 0)
                         {
+                            Tile tempTile = CTX.BattleField.TileArray[ActiveActor.XCoordinate, ActiveActor.YCoordinate];
+                            tilesWalked.Add(tempTile);
                             CTX.BattleField.MoveActor(ActiveActor, action.Value);
+                            CTX.BattleField.TileArray[tempTile.XAxis, tempTile.YAxis].Terrain.IsWalkable = false;
                         }
                         else
                         {
+                            foreach (var tile in tilesWalked)
+                            {
+                                CTX.BattleField.TileArray[tile.XAxis, tile.YAxis].Terrain.IsWalkable = true;
+                            }
                             break;
                         }
                     }
@@ -117,6 +126,19 @@ namespace RealmCore.Logic.Managers
                     Console.WriteLine("error");
                     Console.ReadKey();
                 }
+            }
+        }
+
+        public void BattleFlow()
+        {
+            while (true)
+            {
+                BattleTurn();
+                foreach (var actor in TurnOrder)
+                {
+                    actor.ChosenCharacter.CurrentMovementPoints = actor.ChosenCharacter.MaxMovementPoints;
+                }
+                CTX.Turn++;
             }
         }
     }

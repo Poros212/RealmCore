@@ -1,5 +1,6 @@
 ﻿using RealmCore.Logic.SnapShots;
 using RealmCore.Logic.Validations;
+using Spectre.Console;
 
 namespace RealmCore.Logic.AI
 {
@@ -14,20 +15,54 @@ namespace RealmCore.Logic.AI
 
         public DtoValidationResult<string> TryState()
         {
-            return TryMoveTowardsPlayer(FindNearestPlayer());
+            return TryMoveTwoardsActor(FindNearestPlayer());
         }
 
         public DtoValidationResult<string> ChangeState(string value)
         {
-            return new DtoValidationResult<string>
+            switch (value)
             {
-                IsOK = false,
-                ErrorMessage = "Attack feature not available"
-            };
+                case "idle":
+                    return new IdleState(CTX).TryState();
+
+                default:
+                    return new DtoValidationResult<string>
+                    {
+                        IsOK = false,
+                        ErrorMessage = "Invalid state change"
+                    };
+            }
         }
 
-        public void SurroundingsCheck()
+        public bool SurroundingsCheck(int x, int y, SnapshotBattleContext ctx)
         {
+            if (x >= 0 && x < ctx.Battlefield.Width && y >= 0 && y < ctx.Battlefield.Height)
+            {
+                if (CTX.Battlefield.TileArray[x, y].Terrain.IsWalkable)
+                {
+                    return true;
+                }
+            }
+            else
+            {
+                return false;
+            }
+            return false;
+        }
+
+        public bool ActorAdjacentCheck(Dto_Int_Int_Generic<SnapshotEnemy> dto)
+        {
+            if (
+                    (dto.ValueX - dto.GenericObject.XCoordinate == 0 && dto.ValueY - dto.GenericObject.YCoordinate == 1)
+                    ||
+                    (dto.ValueX - dto.GenericObject.XCoordinate == 0 && dto.ValueY - dto.GenericObject.YCoordinate == -1)
+                    ||
+                    (dto.ValueY - dto.GenericObject.YCoordinate == 0 && dto.ValueX - dto.GenericObject.XCoordinate == 1)
+                    ||
+                    (dto.ValueY - dto.GenericObject.YCoordinate == 0 && dto.ValueX - dto.GenericObject.XCoordinate == -1)
+                )
+            { return true; }
+            else { return false; }
         }
 
         public Dto_Int_Int_Generic<SnapshotEnemy> FindNearestPlayer()
@@ -88,61 +123,148 @@ namespace RealmCore.Logic.AI
             };
         }
 
-        public DtoValidationResult<string> TryMoveTowardsPlayer(Dto_Int_Int_Generic<SnapshotEnemy> dto)
-        {
-            if (
-                !(dto.ValueX - dto.GenericObject.XCoordinate == 0 && dto.ValueY - dto.GenericObject.YCoordinate == 1)
-                ||
-                !(dto.ValueX - dto.GenericObject.XCoordinate == 0 && dto.ValueY - dto.GenericObject.YCoordinate == -1)
-                ||
-                !(dto.ValueY - dto.GenericObject.YCoordinate == 0 && dto.ValueX - dto.GenericObject.XCoordinate == 1)
-                ||
-                !(dto.ValueY - dto.GenericObject.YCoordinate == 0 && dto.ValueX - dto.GenericObject.XCoordinate == -1)
-                )
-            {
-                // use random to decide direction to move so its not always the same
+        //public DtoValidationResult<string> TryMoveTowardsPlayer(Dto_Int_Int_Generic<SnapshotEnemy> dto)
+        //{
+        //    if (!ActorAdjacentCheck(dto))
+        //    {
+        //        // use random to decide direction to move so its not always the same
+        //        // if y or x is 0 and the inverse is blocked wont navigate around
 
+        //        if (dto.ValueX - dto.GenericObject.XCoordinate > 0)
+        //        {
+        //            bool freeSpace = SurroundingsCheck(dto.GenericObject.XCoordinate + 1, dto.GenericObject.YCoordinate);
+
+        //            if (freeSpace)
+        //            {
+        //                return new DtoValidationResult<string>()
+        //                {
+        //                    IsOK = true,
+        //                    Value = Controls.ControlMapping.MovementDOWN
+        //                };
+        //            }
+        //        }
+        //        if (dto.ValueX - dto.GenericObject.XCoordinate < 0)
+        //        {
+        //            bool freeSpace = SurroundingsCheck(dto.GenericObject.XCoordinate - 1, dto.GenericObject.YCoordinate);
+
+        //            if (freeSpace)
+        //            {
+        //                return new DtoValidationResult<string>()
+        //                {
+        //                    IsOK = true,
+        //                    Value = Controls.ControlMapping.MovementUP
+        //                };
+        //            }
+        //        }
+        //        if (dto.ValueY - dto.GenericObject.YCoordinate > 0)
+        //        {
+        //            bool freeSpace = SurroundingsCheck(dto.GenericObject.XCoordinate, dto.GenericObject.YCoordinate + 1);
+        //            if (freeSpace)
+        //            {
+        //                return new DtoValidationResult<string>()
+        //                {
+        //                    IsOK = true,
+        //                    Value = Controls.ControlMapping.MovementRIGHT
+        //                };
+        //            }
+        //        }
+        //        if (dto.ValueY - dto.GenericObject.YCoordinate < 0)
+        //        {
+        //            bool freeSpace = SurroundingsCheck(dto.GenericObject.XCoordinate, dto.GenericObject.YCoordinate - 1);
+        //            if (freeSpace)
+        //            {
+        //                return new DtoValidationResult<string>()
+        //                {
+        //                    IsOK = true,
+        //                    Value = Controls.ControlMapping.MovementLEFT
+        //                };
+        //            }
+        //        }
+        //    }
+        //    return new DtoValidationResult<string>()
+        //    {
+        //        IsOK = false,
+        //        ErrorMessage = "No available spaces to move"
+        //    };
+        //}
+
+        public DtoValidationResult<string> TryMoveTwoardsActor(Dto_Int_Int_Generic<SnapshotEnemy> dto)
+        {
+            List<string> movmentOptions = new List<string>();
+
+            if (!ActorAdjacentCheck(dto))
+            {
                 if (dto.ValueX - dto.GenericObject.XCoordinate > 0)
                 {
-                    //move right
-                    return new DtoValidationResult<string>()
+                    bool freeSpace = SurroundingsCheck(dto.GenericObject.XCoordinate + 1, dto.GenericObject.YCoordinate, CTX);
+
+                    if (freeSpace)
                     {
-                        IsOK = true,
-                        Value = Controls.ControlMapping.MovementDOWN
-                    };
+                        movmentOptions.Add(Controls.ControlMapping.MovementDOWN);
+                    }
                 }
                 if (dto.ValueX - dto.GenericObject.XCoordinate < 0)
                 {
-                    //move left
-                    return new DtoValidationResult<string>()
+                    bool freeSpace = SurroundingsCheck(dto.GenericObject.XCoordinate - 1, dto.GenericObject.YCoordinate, CTX);
+
+                    if (freeSpace)
                     {
-                        IsOK = true,
-                        Value = Controls.ControlMapping.MovementUP
-                    };
+                        movmentOptions.Add(Controls.ControlMapping.MovementUP);
+                    }
                 }
                 if (dto.ValueY - dto.GenericObject.YCoordinate > 0)
                 {
-                    //move down
-                    return new DtoValidationResult<string>()
+                    bool freeSpace = SurroundingsCheck(dto.GenericObject.XCoordinate, dto.GenericObject.YCoordinate + 1, CTX);
+                    if (freeSpace)
                     {
-                        IsOK = true,
-                        Value = Controls.ControlMapping.MovementRIGHT
-                    };
+                        movmentOptions.Add(Controls.ControlMapping.MovementRIGHT);
+                    }
                 }
                 if (dto.ValueY - dto.GenericObject.YCoordinate < 0)
                 {
-                    //move up
-                    return new DtoValidationResult<string>()
+                    bool freeSpace = SurroundingsCheck(dto.GenericObject.XCoordinate, dto.GenericObject.YCoordinate - 1, CTX);
+                    if (freeSpace)
                     {
-                        IsOK = true,
-                        Value = Controls.ControlMapping.MovementLEFT
-                    };
+                        movmentOptions.Add(Controls.ControlMapping.MovementLEFT);
+                    }
                 }
             }
+            // if no options available try any direction
+            if (movmentOptions.Count == 0)
+            {
+                if (SurroundingsCheck(dto.GenericObject.XCoordinate + 1, dto.GenericObject.YCoordinate, CTX))
+                {
+                    movmentOptions.Add(Controls.ControlMapping.MovementDOWN);
+                }
+                if (SurroundingsCheck(dto.GenericObject.XCoordinate - 1, dto.GenericObject.YCoordinate, CTX))
+                {
+                    movmentOptions.Add(Controls.ControlMapping.MovementUP);
+                }
+                if (SurroundingsCheck(dto.GenericObject.XCoordinate, dto.GenericObject.YCoordinate + 1, CTX))
+                {
+                    movmentOptions.Add(Controls.ControlMapping.MovementRIGHT);
+                }
+                if (SurroundingsCheck(dto.GenericObject.XCoordinate, dto.GenericObject.YCoordinate - 1, CTX))
+                {
+                    movmentOptions.Add(Controls.ControlMapping.MovementLEFT);
+                }
+            }
+            // if still no options available exit turn
+            if (movmentOptions.Count == 0)
+            {
+                return new DtoValidationResult<string>()
+                {
+                    IsOK = true,
+                    Value = "exit"
+                };
+            }
+
+            int randomIndex = new Random().Next(movmentOptions.Count);
+
             return new DtoValidationResult<string>()
             {
-                IsOK = false,
-                ErrorMessage = "No movement needed"
+                IsOK = true,
+                Value = movmentOptions[randomIndex]
             };
         }
     }

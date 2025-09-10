@@ -39,6 +39,7 @@ namespace RealmCore.Logic.Maps
             _width = xWidth;
             _tileArray = new Tile[Width, Height];
             InitializeTiles();
+            TileArray[1, 7].Terrain = new WallTerrain();
         }
 
         public void InitializeTiles()
@@ -120,7 +121,7 @@ namespace RealmCore.Logic.Maps
             };
         }
 
-        public Validations.DtoValidationResult<string> MoveActor(Player player, string movement)
+        public Validations.DtoValidationResult<string> MoveActor(Player player, string? movement)
         {
             int deltaX = 0;
             int deltaY = 0;

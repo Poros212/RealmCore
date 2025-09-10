@@ -7,6 +7,12 @@ using System.Threading.Tasks;
 
 namespace RealmCore.Logic.AI
 {
+    public enum StateEnum
+    {
+        IdelState = 0,
+        MoveState = 1,
+    }
+
     public interface IDefaultState
     {
         public DtoValidationResult<string> TryState();

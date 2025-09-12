@@ -229,7 +229,14 @@ namespace RealmCore.Logic.AI
                     }
                 }
             }
-            // if no options available try any direction
+            else
+            {
+                return new DtoValidationResult<string>()
+                {
+                    IsOK = true,
+                    Value = "exit"
+                };
+            }
             if (movmentOptions.Count == 0)
             {
                 if (SurroundingsCheck(dto.GenericObject.XCoordinate + 1, dto.GenericObject.YCoordinate, CTX))

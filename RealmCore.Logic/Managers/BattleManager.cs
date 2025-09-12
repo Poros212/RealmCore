@@ -1,16 +1,8 @@
 ﻿using RealmCore.Logic.AI;
 using RealmCore.Logic.Battle;
 using RealmCore.Logic.Interfaces;
-using RealmCore.Logic.Maps;
 using RealmCore.Logic.SnapShots;
 using RealmCore.Logic.Tiles;
-using RealmCore.Logic.Tiles.Terrains;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RealmCore.Logic.Managers
 {
@@ -44,13 +36,6 @@ namespace RealmCore.Logic.Managers
             {
                 TurnOrder.Add(enemy);
             }
-
-            //Random rng = new Random();
-
-            //TurnOrder = TurnOrder
-            //    .OrderByDescending(actor => actor.ChosenCharacter.Speed)
-            //    .ThenBy(_ => rng.Next())
-            //    .ToList();
         }
 
         public void PlaceActorsOnField()
@@ -72,60 +57,57 @@ namespace RealmCore.Logic.Managers
             }
         }
 
-        public void BattleTurn()
+        public void TurnMovement(Player actor)
         {
-            foreach (var actor in TurnOrder)
+            ActiveActor = actor;
+            CTX.ActiveActorId = actor.ActorId;
+
+            if (actor.TypeFlag == "player" && actor.IsAlive)
             {
-                ActiveActor = actor;
-                CTX.ActiveActorId = actor.ActorId;
-
-                if (actor.TypeFlag == "player" && actor.IsAlive)
+                while (true)
                 {
-                    while (true)
-                    {
-                        string? errorMessage = CTX.BattleField.MoveActor(ActiveActor, BattlefieldImplementation.TryMove(ActiveActor)).ErrorMessage;
+                    string? errorMessage = CTX.BattleField.MoveActor(ActiveActor, BattlefieldImplementation.TryMove(ActiveActor)).ErrorMessage;
 
-                        if (errorMessage != null && errorMessage != "exit")
-                        {
-                            BattlefieldImplementation.ShowError(errorMessage);
-                        }
-                        else if (errorMessage == "exit")
-                        {
-                            break;
-                        }
+                    if (errorMessage != null && errorMessage != "exit")
+                    {
+                        BattlefieldImplementation.ShowError(errorMessage);
+                    }
+                    else if (errorMessage == "exit")
+                    {
+                        break;
                     }
                 }
-                else if (actor.TypeFlag == "enemy" && actor.IsAlive)
-                {
-                    List<Tile> tilesWalked = new List<Tile>();
+            }
+            else if (actor.TypeFlag == "enemy" && actor.IsAlive)
+            {
+                List<Tile> tilesWalked = new List<Tile>();
 
-                    while (true)
+                while (true)
+                {
+                    var ctxSnap = SnapshotFactoryBattle.CreateSnapshotBattleContext(CTX);
+                    DefaultAi defaultAi = new DefaultAi(ctxSnap);
+                    var action = defaultAi.TakeTurn();
+                    if (ActiveActor.ChosenCharacter.CurrentMovementPoints > 0 && action.Value != "exit")
                     {
-                        var ctxSnap = SnapshotFactoryBattle.CreateSnapshotBattleContext(CTX);
-                        DefaultAi defaultAi = new DefaultAi(ctxSnap);
-                        var action = defaultAi.TakeTurn();
-                        if (ActiveActor.ChosenCharacter.CurrentMovementPoints > 0)
+                        Tile tempTile = CTX.BattleField.TileArray[ActiveActor.XCoordinate, ActiveActor.YCoordinate];
+                        tilesWalked.Add(tempTile);
+                        CTX.BattleField.MoveActor(ActiveActor, action.Value);
+                        CTX.BattleField.TileArray[tempTile.XAxis, tempTile.YAxis].Terrain.IsWalkable = false;
+                    }
+                    else
+                    {
+                        foreach (var tile in tilesWalked)
                         {
-                            Tile tempTile = CTX.BattleField.TileArray[ActiveActor.XCoordinate, ActiveActor.YCoordinate];
-                            tilesWalked.Add(tempTile);
-                            CTX.BattleField.MoveActor(ActiveActor, action.Value);
-                            CTX.BattleField.TileArray[tempTile.XAxis, tempTile.YAxis].Terrain.IsWalkable = false;
+                            CTX.BattleField.TileArray[tile.XAxis, tile.YAxis].Terrain.IsWalkable = true;
                         }
-                        else
-                        {
-                            foreach (var tile in tilesWalked)
-                            {
-                                CTX.BattleField.TileArray[tile.XAxis, tile.YAxis].Terrain.IsWalkable = true;
-                            }
-                            break;
-                        }
+                        break;
                     }
                 }
-                else
-                {
-                    Console.WriteLine("error");
-                    Console.ReadKey();
-                }
+            }
+            else
+            {
+                Console.WriteLine("error");
+                Console.ReadKey();
             }
         }
 
@@ -133,12 +115,56 @@ namespace RealmCore.Logic.Managers
         {
             while (true)
             {
-                BattleTurn();
+                foreach (var actor in TurnOrder)
+                {
+                    if (actor.TypeFlag == "player")
+                    {
+                        bool exitCheck = true;
+
+                        while (exitCheck)
+                        {
+                            exitCheck = ActionMenu(actor);
+                        }
+                    }
+                    else if (actor.TypeFlag == "enemy" && actor.IsAlive)
+                    {
+                        TurnMovement(actor);
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
                 foreach (var actor in TurnOrder)
                 {
                     actor.ChosenCharacter.CurrentMovementPoints = actor.ChosenCharacter.MaxMovementPoints;
                 }
                 CTX.Turn++;
+            }
+        }
+
+        public bool ActionMenu(Player actor)
+        {
+            ActiveActor = actor;
+            CTX.ActiveActorId = actor.ActorId;
+
+            int choice = BattlefieldImplementation.DisplayBattleMenu();
+
+            switch (choice)
+            {
+                case 1:
+                    TurnMovement(actor);
+                    return true;
+
+                case 2:
+                    //battlemenu
+                    return true;
+
+                case 3:
+                    return false;
+
+                default:
+                    return false;
             }
         }
     }

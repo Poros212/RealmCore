@@ -1,4 +1,5 @@
 ﻿using RealmCore.Logic;
+using RealmCore.Logic.Battle;
 using RealmCore.Logic.Controls;
 using RealmCore.Logic.Interfaces;
 using RealmCore.Logic.Managers;
@@ -7,6 +8,8 @@ using RealmCore.Logic.Validations;
 using RealmCore.UI.ConsoleApp;
 using Spectre.Console;
 using Spectre.Console.Rendering;
+using System.Numerics;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 
 namespace RealmCore.UI.ConsoleApp.Implementations
@@ -135,6 +138,57 @@ namespace RealmCore.UI.ConsoleApp.Implementations
                 {
                     Console.WriteLine($"{terrain.TerrainImage} = {terrain.Name} [Not Walkable]");
                 }
+            }
+        }
+
+        public int DisplayBattleMenu()
+        {
+            while (true)
+            {
+                AnsiConsole.Clear();
+                AnsiConsole.Markup($"Turn Order\n\n");
+                foreach (var actor in BattleManager.TurnOrder)
+                {
+                    string? color = null;
+
+                    if (actor.TypeFlag == "player")
+                    {
+                        color = "cyan";
+                    }
+                    else if (actor.TypeFlag == "enemy")
+                    {
+                        color = "red";
+                    }
+
+                    if (actor.ActorId == BattleManager.ActiveActor.ActorId)
+                    {
+                        AnsiConsole.Markup($"[bold {color}]{actor.Name} [/]");
+                    }
+                    else
+                    {
+                        AnsiConsole.Markup($"[{color}]{actor.Name} [/]");
+                    }
+                }
+                Console.WriteLine("\n\n");
+
+                DisplayMap();
+                AnsiConsole.Write("\n\n[1] Move\n");
+                AnsiConsole.Write("[2] Cast Spell\n");
+                AnsiConsole.Write("[3] End Turn\n");
+                AnsiConsole.Write($"Select Action: ");
+                string choice = Console.ReadLine();
+
+                if (int.TryParse(choice, out int result))
+                {
+                    if (result < 1 || result > 3)
+                    {
+                        UiFormat.DisplayError("Please select a valid option from the menu.");
+                        continue;
+                    }
+                    return result;
+                }
+
+                UiFormat.DisplayError("Invalid input. Please enter a number corresponding to the menu options.");
             }
         }
     }
